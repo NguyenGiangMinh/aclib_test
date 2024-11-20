@@ -22,7 +22,7 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @GetMapping("/search")
+    @GetMapping("/searching")
     public ResponseEntity<List<BookDTO>> getBookByTitle(@RequestParam String title) {
 
         List<BookDTO> bookDTOList = bookService.searchByTitle(title);
@@ -42,4 +42,15 @@ public class BookController {
         return ResponseEntity.ok(homepageData);
     }
 
+
+    //searchById
+    @GetMapping("/searchingWithId")
+    public ResponseEntity<BookDTO> getSearchedBookByTitle(@RequestParam String id) {
+        BookDTO bookDTOFounded = bookService.searchById(id);
+        if (bookDTOFounded == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        return ResponseEntity.ok(bookDTOFounded);
+    }
 }

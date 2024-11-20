@@ -7,7 +7,8 @@ public class VolumeInfo {
     private ImageLinks imageLinks;
     private String publisher;
     private String publishedDate;
-    private String pageCount;
+    private String[] categories;
+    private int pageCount;
     private String language;
     private boolean availble;
 
@@ -63,11 +64,11 @@ public class VolumeInfo {
         this.publishedDate = publishedDate;
     }
 
-    public String getPageCount() {
+    public int getPageCount() {
         return pageCount;
     }
 
-    public void setPageCount(String pageCount) {
+    public void setPageCount(int pageCount) {
         this.pageCount = pageCount;
     }
 
@@ -86,4 +87,8 @@ public class VolumeInfo {
     public void setAvailble(boolean availble) {
         this.availble = availble;
     }
+
+    public String[] getCategories() {return categories; }
+
+    public void setCategories(String[] categories) {this.categories = categories; }
 }

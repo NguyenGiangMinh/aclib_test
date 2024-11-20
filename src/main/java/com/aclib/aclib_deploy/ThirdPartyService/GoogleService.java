@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class GoogleService {
     private static final String GOOGLE_BOOKS_API_URL_1 = "https://www.googleapis.com/books/v1/volumes?q=";
     private static final String GOOGLE_BOOKS_API_URL_2 = "https://www.googleapis.com/books/v1/volumes/";
-    private static final String API_KEY = "AIzaSyD9foUUvM-Qo_0OwEPgE6vOY-Mqvpvwi8U";
+        private static final String API_KEY = "AIzaSyD9foUUvM-Qo_0OwEPgE6vOY-Mqvpvwi8U";
     private static final String default_thumbnail = "https://st.quantrimang.com/photos/image/2018/12/18/Anh-Sorry-Pix-2.jpg";
 
     //Search with key
@@ -44,9 +44,10 @@ public class GoogleService {
                     String description = item.getVolumeInfo().getDescription();
                     String publisher = item.getVolumeInfo().getPublisher();
                     String publishedDate = item.getVolumeInfo().getPublishedDate();
+                    String[] categories = item.getVolumeInfo().getCategories();
                     int pageCount = 0;
                     try {
-                        pageCount = Integer.parseInt(item.getVolumeInfo().getPageCount());
+                        pageCount = item.getVolumeInfo().getPageCount();
                     } catch (NumberFormatException | NullPointerException e) {
                         // safety purpose
                     }
@@ -55,7 +56,7 @@ public class GoogleService {
                     boolean availableForBorrowing = item.getVolumeInfo().isAvailble();
 
                     return new BookDTO(title, authors, id, selfLink, thumbnail,
-                            description, publisher, publishedDate, pageCount, language, availableForBorrowing);
+                            description, categories ,publisher, publishedDate, pageCount, language, availableForBorrowing);
                 })
                 .collect(Collectors.toList());
     }
@@ -90,9 +91,12 @@ public class GoogleService {
         String thumbnail = (item.getVolumeInfo().getImageLinks() != null) ?
                 item.getVolumeInfo().getImageLinks().getThumbnail() : null;
         String publisher = item.getVolumeInfo().getPublisher();
+        String description = item.getVolumeInfo().getDescription();
+        int pageCount = item.getVolumeInfo().getPageCount();
         String publishDate = item.getVolumeInfo().getPublishedDate();
         String status = "available";
 
-        return new BookDTO(title, authors, idSelfLink, selfLink, thumbnail, publisher, publishDate, status, 1);
+        return new BookDTO(title, authors, idSelfLink, selfLink, thumbnail,
+                publisher, pageCount, description ,publishDate, status, 1);
     }
 }

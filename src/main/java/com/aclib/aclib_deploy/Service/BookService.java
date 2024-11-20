@@ -32,6 +32,7 @@ public class BookService {
                         book.getSelfLink(),
                         book.getThumbnail(),
                         book.getDescription(),
+                        book.getCategory(),
                         book.getPublisher(),
                         book.getPublishedDate(),
                         book.getPageCount(),
@@ -46,7 +47,6 @@ public class BookService {
     }
 
     public List<BookDTO> getHomepageBooks() {
-        // Fetch books from the repository
         List<Book> books = bookRepository.findRecentlyAddedBooks();
         return books.stream()
                 .map(this::convertToDTO)
@@ -65,6 +65,19 @@ public class BookService {
                 book.getStatus(),
                 book.getCopy()
         );
+    }
+
+    public BookDTO searchById(String id) {
+        Book book = bookRepository.findByIdSelfLink(id);
+
+        if (book == null) {
+            BookDTO bookDTO = googleService.searchByIdSelfLink(id);
+            bookDTO.setStatus("Not Available");
+            return bookDTO;
+        }
+
+        return convertToDTO(book);
+
     }
 }
 

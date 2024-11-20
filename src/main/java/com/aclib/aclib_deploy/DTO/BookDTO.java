@@ -7,6 +7,7 @@ public class BookDTO {
     private String selfLink;
     private String thumbnail;
     private String description;
+    private String[] category;
     private String publisher;
     private String publishedDate;
     private int pageCount;
@@ -17,7 +18,7 @@ public class BookDTO {
 
     public BookDTO(String title, String[] authors,
                    String id, String selfLink,
-                   String thumbnail ,String description,
+                   String thumbnail ,String description, String[] category,
                    String publisher, String publishedDate,
                    int pageCount, String language, boolean availableForBorrowing) {
         this.title = title;
@@ -26,13 +27,13 @@ public class BookDTO {
         this.selfLink = selfLink;
         this.thumbnail = thumbnail;
         this.description = description;
+        this.category = category;
         this.publisher = publisher;
         this.publishedDate = publishedDate;
         this.pageCount = pageCount;
         this.language = language;
         this.availableForBorrowing = availableForBorrowing;
     }
-
 
     public BookDTO(String title, String[] authors, String idSelfLink,
                    String selfLink, String thumbnail, String publisher,
@@ -43,6 +44,23 @@ public class BookDTO {
         this.selfLink = selfLink;
         this.thumbnail = thumbnail;
         this.publisher = publisher;
+        this.publishedDate = publishDate;
+        this.status = status;
+        this.copy = copy;
+    }
+
+
+    public BookDTO(String title, String[] authors, String idSelfLink,
+                   String selfLink, String thumbnail, String publisher, int pageCount,
+                   String description, String publishDate, String status,int copy) {
+        this.title = title;
+        this.authors = authors;
+        this.id = idSelfLink;
+        this.selfLink = selfLink;
+        this.thumbnail = thumbnail;
+        this.publisher = publisher;
+        this.pageCount = pageCount;
+        this.description = description;
         this.publishedDate = publishDate;
         this.status = status;
         this.copy = copy;
@@ -153,4 +171,8 @@ public class BookDTO {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public String[] getCategory() {return category; }
+
+    public void setCategory(String[] category) {this.category = category; }
 }

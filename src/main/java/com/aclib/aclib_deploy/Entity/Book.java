@@ -34,11 +34,20 @@ public class Book {
     private String publisher;
 
     @Column(name = "status", nullable = false)
-    private String status; //availabale or not
+    private String status; //available or not
 
     @Column(name = "added_date", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date addedDate;
+
+    @Column
+    private String category;
+
+    @Column
+    private String description;
+
+    @Column
+    private int pageCount;
 
     @Column(name = "copy_count", nullable = false)
     private int copy = 0;
@@ -132,5 +141,9 @@ public class Book {
     public void setSelfLink(String selfLink) {
         this.selfLink = selfLink;
     }
+
+    public String getCategory() {return category; }
+
+    public void setCategory(String category) {this.category = category; }
 }
 
