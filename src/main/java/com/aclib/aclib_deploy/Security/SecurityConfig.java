@@ -25,7 +25,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, UserService userService) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/login", "/register", "/api/books/**", "/verifying-otp", "/resenting-otp").permitAll()
+                        .requestMatchers("/login", "/register", "/api/book/**", "/verifying-otp", "/resenting-otp").permitAll()
                         .requestMatchers("/api/loan/**", "/mls_user/**").hasAnyRole("ADMIN", "USER") // new added
                         .requestMatchers("/admin/**", "/admin/book/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessHandler((request, response, authentication) -> {
-                            response.sendRedirect("/api/books/homepage");
+                            response.sendRedirect("/api/book/homepage");
                         })
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
