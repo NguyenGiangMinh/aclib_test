@@ -1,7 +1,11 @@
 package com.aclib.aclib_deploy.Controller;
 
+import com.aclib.aclib_deploy.DTO.UserDTO;
+import com.aclib.aclib_deploy.Entity.User;
+import com.aclib.aclib_deploy.Service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class LoginController {
 
+    @Autowired
+    private UserService userService;
+
     private final AuthenticationManager authenticationManager;
 
     public LoginController(AuthenticationManager authenticationManager) {
@@ -22,7 +29,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpSession session) {
+    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpSession session) {
         try {
             // Create an unauthenticated token
             Authentication authenticationRequest =
@@ -36,8 +43,11 @@ public class LoginController {
             SecurityContextHolder.getContext().setAuthentication(authenticationResponse);
             request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
 
+            String authUsername = session.getAttribute("authUsername").toString();
+            User user = userService.findUser(authUsername);
+
             // Return a successful response
-            return ResponseEntity.ok("");
+            return ResponseEntity.ok(user.getRole().toString());
 
         } catch (AuthenticationException e) {
             // If authentication fails, return Unauthorized

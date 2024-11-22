@@ -219,6 +219,7 @@ public class UserService implements UserDetailsService {
         userDTO.setUsername(user.getUsername());
         userDTO.setPhone(user.getPhone());
         userDTO.setBio(user.getBio());
+        userDTO.setRole(user.getRole());
         userDTO.setAvatarUrl(user.getAvatarUrl());
         return userDTO;
     }
