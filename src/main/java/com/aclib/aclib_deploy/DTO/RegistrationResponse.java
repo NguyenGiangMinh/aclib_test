@@ -1,11 +1,9 @@
 package com.aclib.aclib_deploy.DTO;
 
 public class RegistrationResponse {
-
     private String registrationId;
     private String notifications;
 
-    // Constructor
     public RegistrationResponse(String registrationId, String notifications) {
         this.registrationId = registrationId;
         this.notifications = notifications;

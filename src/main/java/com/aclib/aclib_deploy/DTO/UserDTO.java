@@ -22,6 +22,9 @@ public class UserDTO {
         this.role = User.UserRole.valueOf(role.name());
     }
 
+    public UserDTO(String s) {
+    }
+
     //getter and setter
     public long getUserId() {
         return userId;
