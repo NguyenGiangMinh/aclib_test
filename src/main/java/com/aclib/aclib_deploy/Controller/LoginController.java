@@ -29,7 +29,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpSession session) {
+    public ResponseEntity<UserDTO> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpSession session) {
         try {
             // Create an unauthenticated token
             Authentication authenticationRequest =
@@ -47,11 +47,12 @@ public class LoginController {
             User user = userService.findUser(authUsername);
 
             // Return a successful response
-            return ResponseEntity.ok(user.getRole().toString());
+            return ResponseEntity.ok(userService.mapToUserDTO(user));
 
         } catch (AuthenticationException e) {
             // If authentication fails, return Unauthorized
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new UserDTO("Authentication failed: Invalid username or password."));
         }
     }
 
