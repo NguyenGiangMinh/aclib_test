@@ -1,5 +1,6 @@
 package com.aclib.aclib_deploy.Service;
 
+import com.aclib.aclib_deploy.DTO.LoanDTO;
 import com.aclib.aclib_deploy.Entity.Loans;
 import com.aclib.aclib_deploy.Entity.User;
 import com.aclib.aclib_deploy.Entity.UserInfo;
@@ -23,9 +24,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @EnableTransactionManagement
@@ -153,8 +156,21 @@ public class UserService implements UserDetailsService {
     }
 
     //get loans deal
-    public Loans getLoans(long userId) {
-        return loanRepository.findByIdSelfLink(userId);
+    public List<LoanDTO> getLoans(long userId) {
+        List<Loans> loans = loanRepository.findByUserId(userId);
+
+        return loans.stream().map(loan -> new LoanDTO(
+                loan.getLoansId(),
+                loan.getUser().getId(),
+                loan.getBook().getId(),
+                loan.getIdSelfLink(),
+                loan.getBookTitle(),
+                loan.getBorrowDate(),
+                loan.getLoanStatus().name(),
+                loan.getReturnDate(),
+                loan.getDueDate(),
+                loan.getRenewalCount()
+        )).collect(Collectors.toList());
     }
 
     //save user image

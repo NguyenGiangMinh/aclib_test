@@ -1,5 +1,6 @@
 package com.aclib.aclib_deploy.Controller;
 
+import com.aclib.aclib_deploy.DTO.LoanDTO;
 import com.aclib.aclib_deploy.Entity.Loans;
 import com.aclib.aclib_deploy.Entity.User;
 import com.aclib.aclib_deploy.Service.LoanService;
@@ -9,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/loan")
@@ -65,7 +68,7 @@ public class LoanController {
 
     // see the user's loans -> return list of loans deal
     @GetMapping("/loanDeals")
-    public ResponseEntity<Loans> getMyLoans(HttpSession session) {
+    public ResponseEntity<List<LoanDTO>> getMyLoans(HttpSession session) {
         String authUsername = (String) session.getAttribute("authUsername");
         User user1 = userService.findUser(authUsername);
 
@@ -73,8 +76,8 @@ public class LoanController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
-        Loans loan = userService.getLoans(user1.getId());
-        return new ResponseEntity<>(loan, HttpStatus.OK);
+        List<LoanDTO> loans = userService.getLoans(user1.getId());
+        return new ResponseEntity<>(loans, HttpStatus.OK);
     }
 
 

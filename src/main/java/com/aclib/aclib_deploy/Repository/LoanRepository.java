@@ -16,7 +16,7 @@ public interface LoanRepository extends JpaRepository<Loans, Long> {
     Loans findByIdSelfLinkAndUserId(@Param("bookId") String bookId, @Param("userId") Long userId);
 
     @Query("select l from Loans l where l.user.id = :userId")
-    Loans findByIdSelfLink(Long userId);
+    List<Loans> findByUserId(@Param("userId") Long userId);
 
     Loans save(Loans loans);
 

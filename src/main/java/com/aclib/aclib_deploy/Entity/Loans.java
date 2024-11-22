@@ -19,6 +19,9 @@ public class Loans {
     @JoinColumn(name = "book_id", referencedColumnName = "id_selfLink", columnDefinition = "VARCHAR(255) NOT NULL")
     private Book book;
 
+    @Column(nullable = false)
+    private String idSelfLink;
+
     @Column(name = "Book_title", nullable = false)
     private String bookTitle;
 
@@ -66,6 +69,10 @@ public class Loans {
     public void setBook(Book book) {
         this.book = book;
     }
+
+    public String getIdSelfLink() { return idSelfLink; }
+
+    public void setIdSelfLink(String idSelfLink) { this.idSelfLink = idSelfLink; }
 
     public String getBookTitle() {
         return bookTitle;

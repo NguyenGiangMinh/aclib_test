@@ -67,6 +67,7 @@ public class LoanService {
         Loans loan = new Loans();
         loan.setBook(book);
         loan.setUser(optionalUser.get());
+        loan.setIdSelfLink(bookId);
         loan.setBookTitle(book.getTitle());
         loan.setBorrowDate(LocalDate.now());
         loan.setLoanStatus(Loans.LoanStatus.ACTIVE);
