@@ -121,7 +121,7 @@ public class LoanService {
     }
 
     /**
-     * Method check the overdue loans if overdue happens.
+     * Method check the overdue loans if overdue happens. Move these code to admin service
      */
     public void checkOverDueDateLoans() {
         List<Loans> overDueDateLoans = loanRepository.findAllByDueDateAndReturnDateIsNull(LocalDate.now());
