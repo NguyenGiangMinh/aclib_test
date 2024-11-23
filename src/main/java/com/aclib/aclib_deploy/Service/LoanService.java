@@ -3,6 +3,8 @@ package com.aclib.aclib_deploy.Service;
 import com.aclib.aclib_deploy.Entity.Book;
 import com.aclib.aclib_deploy.Entity.Loans;
 import com.aclib.aclib_deploy.Entity.User;
+import com.aclib.aclib_deploy.Exception.BookNotAvailableException;
+import com.aclib.aclib_deploy.Exception.UserNotFoundException;
 import com.aclib.aclib_deploy.Repository.UserRepository;
 import com.aclib.aclib_deploy.Repository.LoanRepository;
 import com.aclib.aclib_deploy.Repository.BookRepository;
@@ -53,31 +55,50 @@ public class LoanService {
         return null;
     }
 
-    //Process borrow a book
-    public Loans borrowBook (String bookId, Long userId) {
+    //Process borrowing a book
+    public Loans borrowBook(String bookId, Long userId) {
         Book book = bookRepository.findByIdSelfLink(bookId);
         if (book == null) {
-            throw new BookNotFoundException("Can not found " + bookId);
+            throw new BookNotFoundException("Cannot find " + bookId);
         }
 
         Optional<User> optionalUser = userRepository.findById(userId);
+        if (!optionalUser.isPresent()) {
+            throw new UserNotFoundException("User not found with id " + userId);
+        }
 
-        book.setCopy(book.getCopy() - 1);
+        Loans existedLoan = loanRepository.findByIdSelfLinkAndUserId(bookId, userId);
 
-        Loans loan = new Loans();
-        loan.setBook(book);
-        loan.setUser(optionalUser.get());
-        loan.setIdSelfLink(bookId);
-        loan.setBookTitle(book.getTitle());
-        loan.setBorrowDate(LocalDate.now());
-        loan.setLoanStatus(Loans.LoanStatus.ACTIVE);
-        loan.setDueDate(LocalDate.now().plusDays(BORROW_PERIOD_DATE));
-        loanRepository.save(loan);
+        if (existedLoan == null) {
+            if (book.getCopy() <= 0) {
+                throw new BookNotAvailableException("The book " + bookId + " is not available for borrowing.");
+            }
 
-        emailService.makingLoanSuccessfully(optionalUser.get().getEmail(),
-                optionalUser.get().getUsername(), bookId, loan.getDueDate());
+            book.setCopy(book.getCopy() - 1);
+            bookRepository.save(book);
 
-        return loan;
+            Loans loan = new Loans();
+            loan.setBook(book);
+            loan.setUser(optionalUser.get());
+            loan.setIdSelfLink(bookId);
+            loan.setBookTitle(book.getTitle());
+            loan.setBorrowDate(LocalDate.now());
+            loan.setLoanStatus(Loans.LoanStatus.ACTIVE);
+            loan.setDueDate(LocalDate.now().plusDays(BORROW_PERIOD_DATE));
+            loanRepository.save(loan);
+
+            emailService.makingLoanSuccessfully(optionalUser.get().getEmail(),
+                    optionalUser.get().getUsername(), bookId, loan.getDueDate());
+
+            return loan;
+        } else {
+            existedLoan.setBorrowDate(LocalDate.now());
+            existedLoan.setLoanStatus(Loans.LoanStatus.ACTIVE);
+            existedLoan.setDueDate(LocalDate.now().plusDays(BORROW_PERIOD_DATE));
+            loanRepository.save(existedLoan);
+
+            return existedLoan;
+        }
     }
 
     //Process return a book
