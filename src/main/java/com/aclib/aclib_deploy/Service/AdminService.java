@@ -4,12 +4,15 @@ import com.aclib.aclib_deploy.Entity.Book;
 import com.aclib.aclib_deploy.DTO.BookDTO;
 import com.aclib.aclib_deploy.Entity.User;
 import com.aclib.aclib_deploy.DTO.UserDTO;
+import com.aclib.aclib_deploy.Exception.BookNotFoundException;
 import com.aclib.aclib_deploy.Repository.BookRepository;
 import com.aclib.aclib_deploy.Repository.UserRepository;
 import com.aclib.aclib_deploy.ThirdPartyService.GoogleService;
 import com.aclib.aclib_deploy.ThirdPartyService.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 
 @Service
@@ -26,8 +29,12 @@ public class AdminService {
     @Autowired
     private EmailService emailService;
 
-    public void deleteBookInStock(String bookId) {
-        bookRepository.deleteBookByIdSelfLink(bookId);
+    public void deleteBookInStock(long id) {
+        Optional<Book> book = bookRepository.findById(id);
+        if (book == null) {
+            throw new BookNotFoundException(String.valueOf(id));
+        }
+        bookRepository.delete(book.get());
     }
 
     public void updateBookCopy(String bookId, int newCopy) {

@@ -20,10 +20,10 @@ public class AdminController {
 
 
     @DeleteMapping("/book/id")
-    public ResponseEntity<Void> deleteBookFromStock(@RequestParam String BookId, HttpSession session) {
+    public ResponseEntity<Void> deleteBookFromStock(@RequestParam long BookId, HttpSession session) {
         System.out.println(session.getAttribute("authUsername"));
 
-        adminService.deleteBookInStock(BookId);
+        adminService.deleteBookInStogit ck(BookId);
         return ResponseEntity.ok().build();
     }
 

@@ -214,7 +214,7 @@ public class UserService implements UserDetailsService {
         return mapToUserDTO(user);
     }
 
-    private UserDTO mapToUserDTO(User user) {
+    public UserDTO mapToUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername(user.getUsername());
         userDTO.setPhone(user.getPhone());
