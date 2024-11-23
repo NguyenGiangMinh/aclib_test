@@ -23,7 +23,7 @@ public class AdminController {
     public ResponseEntity<Void> deleteBookFromStock(@RequestParam long BookId, HttpSession session) {
         System.out.println(session.getAttribute("authUsername"));
 
-        adminService.deleteBookInStogit ck(BookId);
+        adminService.deleteBookInStock(BookId);
         return ResponseEntity.ok().build();
     }
 
