@@ -37,15 +37,6 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
-    // when user admin triggers the endpoint, the mail will be automatically sent.
-    @PostMapping("/check-overdue-loans")
-    public ResponseEntity<String> checkOverDueDateLoans(HttpSession session) {
-        System.out.println(session.getAttribute("authUsername"));
-
-        loanService.checkOverDueDateLoans();
-        return ResponseEntity.ok("Overdue loans are checked and processed successfully.");
-    }
-
     @PutMapping("/newAdmin")
     public ResponseEntity<UserDTO> updatingNewAdmin(@RequestBody updateNewAdmin newAdmin, HttpSession session) {
         System.out.println(session.getAttribute("authUsername"));

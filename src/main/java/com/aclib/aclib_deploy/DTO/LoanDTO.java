@@ -1,6 +1,7 @@
 package com.aclib.aclib_deploy.DTO;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class LoanDTO {
     private Long loansId;
@@ -8,16 +9,16 @@ public class LoanDTO {
     private Long bookId; // Only the ID of the book
     private String idSelfLink;
     private String bookTitle;
-    private LocalDate borrowDate;
+    private LocalDateTime borrowDate;
     private String loanStatus;
-    private LocalDate returnDate;
-    private LocalDate dueDate;
+    private LocalDateTime returnDate;
+    private LocalDateTime dueDate;
     private int renewalCount;
 
     // Constructor
     public LoanDTO(Long loansId, Long userId, Long bookId, String idSelfLink, String bookTitle,
-                   LocalDate borrowDate, String loanStatus, LocalDate returnDate,
-                   LocalDate dueDate, int renewalCount) {
+                   LocalDateTime borrowDate, String loanStatus, LocalDateTime returnDate,
+                   LocalDateTime dueDate, int renewalCount) {
         this.loansId = loansId;
         this.userId = userId;
         this.bookId = bookId;
@@ -29,6 +30,7 @@ public class LoanDTO {
         this.dueDate = dueDate;
         this.renewalCount = renewalCount;
     }
+
 
     public Long getLoansId() {
         return loansId;
@@ -70,11 +72,9 @@ public class LoanDTO {
         this.bookTitle = bookTitle;
     }
 
-    public LocalDate getBorrowDate() {
-        return borrowDate;
-    }
+    public LocalDateTime getBorrowDate() { return borrowDate; }
 
-    public void setBorrowDate(LocalDate borrowDate) {
+    public void setBorrowDate(LocalDateTime borrowDate) {
         this.borrowDate = borrowDate;
     }
 
@@ -86,19 +86,19 @@ public class LoanDTO {
         this.loanStatus = loanStatus;
     }
 
-    public LocalDate getReturnDate() {
+    public LocalDateTime getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate(LocalDate returnDate) {
+    public void setReturnDate(LocalDateTime returnDate) {
         this.returnDate = returnDate;
     }
 
-    public LocalDate getDueDate() {
+    public LocalDateTime getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDate dueDate) {
+    public void setDueDate(LocalDateTime dueDate) {
         this.dueDate = dueDate;
     }
 

@@ -50,11 +50,11 @@ public class EmailService {
         mailSender.send(message1);
     }
 
-    public void makingLoanSuccessfully (String toEmail, String userName, String bookTitle, LocalDate dueDate) {
+    public void makingLoanSuccessfully (String toEmail, String userName, String bookTitle, LocalDateTime dueDate) {
         SimpleMailMessage message = new SimpleMailMessage();
 
         String subjects1 = "Notification: You successfully make an loan";
-        String message1 = "The book ' " + bookTitle + " ' was successfully borrowed by user " + userName
+        String message1 = "The book '" + bookTitle + "' was successfully borrowed by user " + userName
                 + "\n" + "Your loans will be over due date at " + dueDate
                 + "\n" + "Thanks for using our service."
                 + "\n" + "Have a nice day";

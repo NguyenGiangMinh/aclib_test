@@ -7,6 +7,7 @@ import com.aclib.aclib_deploy.Service.LoanService;
 import com.aclib.aclib_deploy.Service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ public class LoanController {
     //borrow
     //check parameters all methods
     @PostMapping("/borrowing")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Loans> borrowBook(@RequestBody BorrowRequest borrowRequest, HttpSession session) {
         String authUsername = (String) session.getAttribute("authUsername");
         User user1 = userService.findUser(authUsername);

@@ -13,7 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("http://localhost:5173")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowCredentials(true)
-                .allowedHeaders("*")
+                .allowedHeaders("Authorization", "Content-Type", "Connection")
                 .exposedHeaders("Authorization", "Content-Type", "Connection");
     }
 }

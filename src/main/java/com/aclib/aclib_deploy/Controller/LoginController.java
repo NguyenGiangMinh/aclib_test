@@ -16,6 +16,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 public class LoginController {
 
@@ -54,6 +56,18 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new UserDTO("Authentication failed: Invalid username or password."));
         }
+    }
+
+    // new
+    @GetMapping("/auth/user")
+    public ResponseEntity<?> getAuthenticatedUser(HttpSession session) {
+        String authUsername = (String) session.getAttribute("authUsername");
+        if (authUsername == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Not authenticated"));
+        }
+
+        User user = userService.findUser(authUsername);
+        return ResponseEntity.ok(userService.mapToUserDTO(user));
     }
 
     public record LoginRequest(String username, String password) {

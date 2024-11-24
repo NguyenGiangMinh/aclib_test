@@ -39,8 +39,8 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
-        UserDTO updatedUser = userService.updateDetails(user1, profileUpdate.phone
-                , profileUpdate.bio, profileUpdate.file);
+        UserDTO updatedUser = userService.updateDetails(user1, profileUpdate.phone,
+                profileUpdate.bio, profileUpdate.file);
         return ResponseEntity.ok(updatedUser);
     }
 

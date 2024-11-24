@@ -14,7 +14,7 @@ import com.aclib.aclib_deploy.Exception.LoanNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +38,8 @@ public class LoanService {
     private static final int BORROW_PERIOD_DATE_NEW = 30;
     private static final int MAX_RENEWALS = 1;
     private static final int MAX_DATE_AFTER_NOTIFY = 10;
+    private static final int BORROW_PERIOD_MINUTES = 3;  // For testing purposes
+    private static final int MAX_MINUTES_AFTER_NOTIFY = 2;
 
     public Optional<Loans> searchByLoansId(long loansId) {
         return loanRepository.findById(loansId);
@@ -82,20 +84,26 @@ public class LoanService {
             loan.setUser(optionalUser.get());
             loan.setIdSelfLink(bookId);
             loan.setBookTitle(book.getTitle());
-            loan.setBorrowDate(LocalDate.now());
+            loan.setBorrowDate(LocalDateTime.now());
             loan.setLoanStatus(Loans.LoanStatus.ACTIVE);
-            loan.setDueDate(LocalDate.now().plusDays(BORROW_PERIOD_DATE));
+//            loan.setDueDate(LocalDateTime.now().plusDays(BORROW_PERIOD_DATE));
+            loan.setDueDate(LocalDateTime.now().plusMinutes(BORROW_PERIOD_MINUTES)); //test
             loanRepository.save(loan);
 
             emailService.makingLoanSuccessfully(optionalUser.get().getEmail(),
-                    optionalUser.get().getUsername(), bookId, loan.getDueDate());
+                    optionalUser.get().getUsername(), book.getTitle(), loan.getDueDate());
 
             return loan;
         } else {
-            existedLoan.setBorrowDate(LocalDate.now());
+            existedLoan.setBorrowDate(LocalDateTime.now());
             existedLoan.setLoanStatus(Loans.LoanStatus.ACTIVE);
-            existedLoan.setDueDate(LocalDate.now().plusDays(BORROW_PERIOD_DATE));
+//            existedLoan.setDueDate(LocalDateTime.now().plusDays(BORROW_PERIOD_DATE));
+            existedLoan.setDueDate(LocalDateTime.now().plusMinutes(BORROW_PERIOD_MINUTES)); //Test
+            existedLoan.setReturnDate(null);
             loanRepository.save(existedLoan);
+
+            emailService.makingLoanSuccessfully(optionalUser.get().getEmail(),
+                    optionalUser.get().getUsername(), book.getTitle(), existedLoan.getDueDate());
 
             return existedLoan;
         }
@@ -110,7 +118,7 @@ public class LoanService {
         }
 
         Book book = loan.getBook();
-        loan.setReturnDate(LocalDate.now());
+        loan.setReturnDate(LocalDateTime.now());
         loan.setLoanStatus(Loans.LoanStatus.RETURNED);
         loan.setBookTitle(book.getTitle());
         loanRepository.save(loan);
@@ -121,23 +129,55 @@ public class LoanService {
     }
 
     /**
-     * Method check the overdue loans if overdue happens. Move these code to admin service
+     * Method check the overdue loans if overdue happens.
+     * I check
      */
+//    public void checkOverDueDateLoans() {
+//        List<Loans> overDueDateLoans = loanRepository.findAllByDueDateAndReturnDateIsNull(LocalDate.now());
+//
+//        if (overDueDateLoans.isEmpty()) {
+//            System.out.println("No overdue loans found for processing.");
+//            return;
+//        }
+//
+//        for (Loans loan : overDueDateLoans) {
+//            try {
+//                if (loan.getRenewalCount() >= MAX_RENEWALS) {
+//                    autoReturn(loan);
+//                } else if (loan.getNotificationSentDate() == null) {
+//                    loan.setNotificationSentDate(LocalDate.now());
+//                    loan.setLoanStatus(Loans.LoanStatus.OVERDUE);
+//                    loanRepository.save(loan);
+//                    sendNotifications(loan.getUser(), loan);
+//                } else {
+//                    long daysOverdue = ChronoUnit.DAYS.between(loan.getNotificationSentDate(), LocalDate.now());
+//                    if (daysOverdue >= MAX_DATE_AFTER_NOTIFY) {
+//                        markAsLost(loan);
+//                    }
+//                }
+//            } catch (Exception e) {
+//                System.out.println("Error processing loan ID " + loan.getLoansId() + ": " + e.getMessage());
+//            }
+//        }
+//    }
+
     public void checkOverDueDateLoans() {
-        List<Loans> overDueDateLoans = loanRepository.findAllByDueDateAndReturnDateIsNull(LocalDate.now());
+        // Fetch overdue loans (modify your repository query if needed for minutes)
+        List<Loans> overDueDateLoans = loanRepository.findAllByDueDateAndReturnDateIsNull(LocalDateTime.now());
 
         for (Loans loan : overDueDateLoans) {
             try {
                 if (loan.getRenewalCount() >= MAX_RENEWALS) {
                     autoReturn(loan);
                 } else if (loan.getNotificationSentDate() == null) {
-                    loan.setNotificationSentDate(LocalDate.now());
+                    loan.setNotificationSentDate(LocalDateTime.now()); // Switch to LocalDateTime
                     loan.setLoanStatus(Loans.LoanStatus.OVERDUE);
                     loanRepository.save(loan);
                     sendNotifications(loan.getUser(), loan);
                 } else {
-                    long daysOverdue = ChronoUnit.DAYS.between(loan.getNotificationSentDate(), LocalDate.now());
-                    if (daysOverdue >= MAX_DATE_AFTER_NOTIFY) {
+                    // Switch to using MINUTES for testable precision
+                    long minutesOverdue = ChronoUnit.MINUTES.between(loan.getNotificationSentDate(), LocalDateTime.now());
+                    if (minutesOverdue >= MAX_MINUTES_AFTER_NOTIFY) { // Replace with your test constant
                         markAsLost(loan);
                     }
                 }
@@ -155,12 +195,12 @@ public class LoanService {
 
     //re-borrow
     public Loans borrowAgain (Long loanId) {
-        Optional<Loans> optionnalLoan = loanRepository.findById(loanId);
-        if (optionnalLoan.isEmpty()) {
+        Optional<Loans> optionalLoan = loanRepository.findById(loanId);
+        if (optionalLoan.isEmpty()) {
             throw new LoanNotFoundException("Can not found your loans");
         }
 
-        Loans loan = optionnalLoan.get();
+        Loans loan = optionalLoan.get();
         if (loan.getReturnDate() != null) {
             throw new IllegalStateException("Book has already been returned");
         }
@@ -169,7 +209,8 @@ public class LoanService {
             throw new IllegalStateException("Maximum renewals reached for this loan");
         }
 
-        loan.setDueDate(LocalDate.now().plusDays(BORROW_PERIOD_DATE_NEW));
+//        loan.setDueDate(LocalDateTime.now().plusDays(BORROW_PERIOD_DATE_NEW));
+        loan.setDueDate(LocalDateTime.now().plusMinutes(BORROW_PERIOD_MINUTES)); //test
         loan.setRenewalCount(loan.getRenewalCount() + 1);
         loanRepository.save(loan);
 
@@ -177,7 +218,7 @@ public class LoanService {
     }
 
     private void autoReturn(Loans loan) {
-        loan.setReturnDate(LocalDate.now());
+        loan.setReturnDate(LocalDateTime.now());
         loanRepository.save(loan);
 
         Book book = loan.getBook();
@@ -192,11 +233,11 @@ public class LoanService {
     //whether they should update copy in real?
     private void markAsLost(Loans loan) {
         loan.setLoanStatus(Loans.LoanStatus.LOST);
-        loan.setReturnDate(LocalDate.now());
+        loan.setReturnDate(LocalDateTime.now());
         loanRepository.save(loan);
 
         Book book = loan.getBook();
-        book.setCopy(book.getCopy() - 1);
+        book.setCopy(book.getCopy());
         bookRepository.save(book);
 
         //Send to all administrators
