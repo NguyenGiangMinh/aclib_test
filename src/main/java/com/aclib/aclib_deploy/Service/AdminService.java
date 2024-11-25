@@ -64,7 +64,6 @@ public class AdminService {
         book.setSelfLink(bookDTO.getSelfLink());
         book.setPublishDate(bookDTO.getPublishedDate());
         book.setPublisher(bookDTO.getPublisher());
-        book.setStatus(bookDTO.isAvailableForBorrowing() ? "available" : "not available");
         book.setCopy(bookDTO.getCopy());
         return book;
     }

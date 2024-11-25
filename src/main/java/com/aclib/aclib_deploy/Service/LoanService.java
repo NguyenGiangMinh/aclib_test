@@ -1,5 +1,6 @@
 package com.aclib.aclib_deploy.Service;
 
+import com.aclib.aclib_deploy.DTO.LoanDTO;
 import com.aclib.aclib_deploy.Entity.Book;
 import com.aclib.aclib_deploy.Entity.Loans;
 import com.aclib.aclib_deploy.Entity.User;
@@ -41,8 +42,8 @@ public class LoanService {
     private static final int BORROW_PERIOD_MINUTES = 3;  // For testing purposes
     private static final int MAX_MINUTES_AFTER_NOTIFY = 2;
 
-    public Optional<Loans> searchByLoansId(long loansId) {
-        return loanRepository.findById(loansId);
+    public LoanDTO searchByLoansId(long loansId) {
+        return convertToDTO(loanRepository.findById(loansId).get());
     }
 
     public String getUsernameWithLoans(long loanId){
@@ -58,7 +59,7 @@ public class LoanService {
     }
 
     //Process borrowing a book
-    public Loans borrowBook(String bookId, Long userId) {
+    public LoanDTO borrowBook(String bookId, Long userId) {
         Book book = bookRepository.findByIdSelfLink(bookId);
         if (book == null) {
             throw new BookNotFoundException("Cannot find " + bookId);
@@ -93,7 +94,7 @@ public class LoanService {
             emailService.makingLoanSuccessfully(optionalUser.get().getEmail(),
                     optionalUser.get().getUsername(), book.getTitle(), loan.getDueDate());
 
-            return loan;
+            return convertToDTO(loan);
         } else {
             existedLoan.setBorrowDate(LocalDateTime.now());
             existedLoan.setLoanStatus(Loans.LoanStatus.ACTIVE);
@@ -105,12 +106,12 @@ public class LoanService {
             emailService.makingLoanSuccessfully(optionalUser.get().getEmail(),
                     optionalUser.get().getUsername(), book.getTitle(), existedLoan.getDueDate());
 
-            return existedLoan;
+            return convertToDTO(existedLoan);
         }
     }
 
     //Process return a book
-    public Loans returnBook (String bookId, long userId) {
+    public LoanDTO returnBook (String bookId, long userId) {
         Loans loan = loanRepository.findByIdSelfLinkAndUserId(bookId, userId);
 
         if (loan == null) {
@@ -125,7 +126,7 @@ public class LoanService {
         book.setCopy(book.getCopy() + 1);
         bookRepository.save(book);
 
-        return loan;
+        return convertToDTO(loan);
     }
 
     /**
@@ -161,8 +162,8 @@ public class LoanService {
 //        }
 //    }
 
+    //Test with minute
     public void checkOverDueDateLoans() {
-        // Fetch overdue loans (modify your repository query if needed for minutes)
         List<Loans> overDueDateLoans = loanRepository.findAllByDueDateAndReturnDateIsNull(LocalDateTime.now());
 
         for (Loans loan : overDueDateLoans) {
@@ -194,7 +195,7 @@ public class LoanService {
     }
 
     //re-borrow
-    public Loans borrowAgain (Long loanId) {
+    public LoanDTO borrowAgain (Long loanId) {
         Optional<Loans> optionalLoan = loanRepository.findById(loanId);
         if (optionalLoan.isEmpty()) {
             throw new LoanNotFoundException("Can not found your loans");
@@ -214,7 +215,7 @@ public class LoanService {
         loan.setRenewalCount(loan.getRenewalCount() + 1);
         loanRepository.save(loan);
 
-        return loan;
+        return convertToDTO(loan);
     }
 
     private void autoReturn(Loans loan) {
@@ -249,4 +250,17 @@ public class LoanService {
         System.out.println("Marked loan as lost and notified admin.");
     }
 
+    private LoanDTO convertToDTO(Loans loan) {
+        return new LoanDTO(
+                loan.getLoansId(),
+                loan.getUser().getId(),
+                loan.getBook().getId(),
+                loan.getIdSelfLink(),
+                loan.getBookTitle(),
+                loan.getBorrowDate(),
+                loan.getLoanStatus().name(),
+                loan.getReturnDate(),
+                loan.getDueDate(),
+                loan.getRenewalCount());
+    }
 }

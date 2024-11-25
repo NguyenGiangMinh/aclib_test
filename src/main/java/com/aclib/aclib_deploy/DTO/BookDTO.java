@@ -13,7 +13,6 @@ public class BookDTO {
     private int pageCount;
     private String language;
     private boolean availableForBorrowing;
-    private String status; // available or not; fetch with book entity
     private int copy; //fetch with book entity
 
     public BookDTO(String title, String[] authors,
@@ -37,7 +36,7 @@ public class BookDTO {
 
     public BookDTO(String title, String[] authors, String idSelfLink,
                    String selfLink, String thumbnail, String publisher,
-                   String publishDate, String status,int copy) {
+                   String publishDate,int copy) {
         this.title = title;
         this.authors = authors;
         this.id = idSelfLink;
@@ -45,14 +44,13 @@ public class BookDTO {
         this.thumbnail = thumbnail;
         this.publisher = publisher;
         this.publishedDate = publishDate;
-        this.status = status;
         this.copy = copy;
     }
 
 
     public BookDTO(String title, String[] authors, String idSelfLink,
                    String selfLink, String thumbnail, String publisher, int pageCount,
-                   String description, String publishDate, String status,int copy) {
+                   String description, String publishDate, int copy) {
         this.title = title;
         this.authors = authors;
         this.id = idSelfLink;
@@ -62,7 +60,6 @@ public class BookDTO {
         this.pageCount = pageCount;
         this.description = description;
         this.publishedDate = publishDate;
-        this.status = status;
         this.copy = copy;
     }
 
@@ -162,14 +159,6 @@ public class BookDTO {
 
     public void setCopy(int copy) {
         this.copy = copy;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String[] getCategory() {return category; }

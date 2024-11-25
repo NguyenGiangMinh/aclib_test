@@ -95,9 +95,8 @@ public class GoogleService {
         String description = item.getVolumeInfo().getDescription();
         int pageCount = item.getVolumeInfo().getPageCount();
         String publishDate = item.getVolumeInfo().getPublishedDate();
-        String status = "available";
 
         return new BookDTO(title, authors, idSelfLink, selfLink, thumbnail,
-                publisher, pageCount, description ,publishDate, status, 1);
+                publisher, pageCount, description ,publishDate, 1);
     }
 }

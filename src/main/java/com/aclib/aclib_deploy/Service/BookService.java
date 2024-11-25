@@ -62,7 +62,6 @@ public class BookService {
                 book.getThumbnail(),
                 book.getPublisher(),
                 book.getPublishDate(),
-                book.getStatus(),
                 book.getCopy()
         );
     }
@@ -72,12 +71,10 @@ public class BookService {
 
         if (book == null) {
             BookDTO bookDTO = googleService.searchByIdSelfLink(id);
-            bookDTO.setStatus("Not Available");
             return bookDTO;
         }
 
         return convertToDTO(book);
-
     }
 }
 

@@ -18,6 +18,7 @@ public class Book {
     @Column(name = "author", nullable = false)
     private String author;
 
+    @Lob
     @Column(name = "thumnail")
     private String thumbnail;
 
@@ -32,9 +33,6 @@ public class Book {
 
     @Column(name = "publisher")
     private String publisher;
-
-    @Column(name = "status", nullable = false)
-    private String status; //available or not
 
     @Column(name = "added_date", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -108,14 +106,6 @@ public class Book {
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public int getCopy() {
