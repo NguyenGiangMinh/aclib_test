@@ -97,4 +97,18 @@ public class EmailService {
         message.setFrom("mlsproject2110@gmail.com");
         mailSender.send(message);
     }
+
+    public void returnSuccessfully(String toEmail, String userName, String bookTitle) {
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        String subject4 = "Thank you";
+        String message4 = userName + "returned the book " + bookTitle
+                +  "\n\t Thanks for using our service.";
+
+        message.setTo(toEmail);
+        message.setSubject(subject4);
+        message.setText(message4);
+        message.setFrom("mlsproject2110@gmail.com");
+        mailSender.send(message);
+    }
 }

@@ -41,6 +41,8 @@ public class LoanService {
     private static final int MAX_DATE_AFTER_NOTIFY = 10;
     private static final int BORROW_PERIOD_MINUTES = 3;  // For testing purposes
     private static final int MAX_MINUTES_AFTER_NOTIFY = 2;
+    @Autowired
+    private UserService userService;
 
     public LoanDTO searchByLoansId(long loansId) {
         return convertToDTO(loanRepository.findById(loansId).get());
@@ -96,6 +98,11 @@ public class LoanService {
 
             return convertToDTO(loan);
         } else {
+
+            if (existedLoan.getLoanStatus() == Loans.LoanStatus.ACTIVE || existedLoan.getReturnDate() == null) {
+                throw new IllegalStateException("User must return the book before borrowing it again.");
+            }
+
             existedLoan.setBorrowDate(LocalDateTime.now());
             existedLoan.setLoanStatus(Loans.LoanStatus.ACTIVE);
 //            existedLoan.setDueDate(LocalDateTime.now().plusDays(BORROW_PERIOD_DATE));
@@ -117,7 +124,7 @@ public class LoanService {
         if (loan == null) {
             throw new LoanNotFoundException("Can not found your loans");
         }
-
+        User user = userRepository.findById(userId).get();
         Book book = loan.getBook();
         loan.setReturnDate(LocalDateTime.now());
         loan.setLoanStatus(Loans.LoanStatus.RETURNED);
@@ -125,6 +132,7 @@ public class LoanService {
         loanRepository.save(loan);
         book.setCopy(book.getCopy() + 1);
         bookRepository.save(book);
+        emailService.returnSuccessfully(user.getEmail(), user.getUsername(), book.getTitle());
 
         return convertToDTO(loan);
     }
