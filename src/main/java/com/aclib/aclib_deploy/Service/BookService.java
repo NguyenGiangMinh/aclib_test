@@ -54,7 +54,7 @@ public class BookService {
     }
 
     private BookDTO convertToDTO(Book book) {
-        return new BookDTO(
+        BookDTO bookDTO = new BookDTO(
                 book.getTitle(),
                 new String[]{book.getAuthor()},
                 book.getIdSelfLink(),
@@ -62,8 +62,10 @@ public class BookService {
                 book.getThumbnail(),
                 book.getPublisher(),
                 book.getPublishDate(),
-                book.getCopy()
-        );
+                book.getCopy());
+
+        bookDTO.setAvailableForBorrowing(true);
+        return bookDTO;
     }
 
     public BookDTO searchById(String id) {
