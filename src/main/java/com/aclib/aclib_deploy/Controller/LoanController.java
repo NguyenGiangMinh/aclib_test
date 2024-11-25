@@ -28,11 +28,11 @@ public class LoanController {
     //check parameters all methods
     @PostMapping("/borrowing")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<Loans> borrowBook(@RequestBody BorrowRequest borrowRequest, HttpSession session) {
+    public ResponseEntity<LoanDTO> borrowBook(@RequestBody BorrowRequest borrowRequest, HttpSession session) {
         String authUsername = (String) session.getAttribute("authUsername");
         User user1 = userService.findUser(authUsername);
 
-        Loans loan = loanService.borrowBook(borrowRequest.bookId, user1.getId());
+        LoanDTO loan = loanService.borrowBook(borrowRequest.bookId, user1.getId());
         if (loan == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -42,11 +42,11 @@ public class LoanController {
 
     //return
     @PostMapping("/returning")
-    public ResponseEntity<Loans> returnBook(@RequestBody ReturnRequest returnRequest, HttpSession session) {
+    public ResponseEntity<LoanDTO> returnBook(@RequestBody ReturnRequest returnRequest, HttpSession session) {
         String authUsername = (String) session.getAttribute("authUsername");
         User user1 = userService.findUser(authUsername);
 
-        Loans loan = loanService.returnBook(returnRequest.bookId, user1.getId());
+        LoanDTO loan = loanService.returnBook(returnRequest.bookId, user1.getId());
         if (loan != null) {
             return ResponseEntity.ok(loan);
         }
@@ -57,10 +57,10 @@ public class LoanController {
     // borrow again (if allowed)
     // PutMapping needed here like Update purpose?
     @PutMapping("/renewing")
-    public ResponseEntity<Loans> renewLoan(@RequestBody LoanRenewalRequest renewalRequest, HttpSession session) {
+    public ResponseEntity<LoanDTO> renewLoan(@RequestBody LoanRenewalRequest renewalRequest, HttpSession session) {
         System.out.println(session.getAttribute("authUsername"));
 
-        Loans re_loans = loanService.borrowAgain(renewalRequest.loanId());
+        LoanDTO re_loans = loanService.borrowAgain(renewalRequest.loanId());
         if (re_loans == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
