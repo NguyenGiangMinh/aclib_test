@@ -19,7 +19,7 @@ public class Book {
     private String author;
 
     @Lob
-    @Column(name = "thumnail")
+    @Column(name = "thumnail", columnDefinition = "TEXT")
     private String thumbnail;
 
     @Column(name = "id_selfLink", columnDefinition = "VARCHAR(255) NOT NULL")
