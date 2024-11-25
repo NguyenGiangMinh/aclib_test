@@ -97,6 +97,6 @@ public class GoogleService {
         String publishDate = item.getVolumeInfo().getPublishedDate();
 
         return new BookDTO(title, authors, idSelfLink, selfLink, thumbnail,
-                publisher, pageCount, description ,publishDate, 1);
+                publisher, pageCount, description ,publishDate, 0);
     }
 }
