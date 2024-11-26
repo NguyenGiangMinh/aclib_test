@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -141,7 +140,6 @@ public class UserService implements UserDetailsService {
         userDTO.setPhone(user.getPhone());
         userDTO.setEmail(user.getEmail());
         userDTO.setUserId(userId);
-        userDTO.setBio(user.getBio());
         userDTO.setRole(user.getRole());
         return userDTO;
     }
@@ -150,7 +148,9 @@ public class UserService implements UserDetailsService {
     public List<LoanDTO> getLoans(long userId) {
         List<Loans> loans = loanRepository.findByUserId(userId);
 
-        return loans.stream().map(loan -> new LoanDTO(
+        return loans.stream()
+                .filter(loan -> loan.getLoanStatus() == Loans.LoanStatus.ACTIVE)
+                .map(loan -> new LoanDTO(
                 loan.getLoansId(),
                 loan.getUser().getId(),
                 loan.getBook().getId(),
@@ -164,29 +164,10 @@ public class UserService implements UserDetailsService {
         )).collect(Collectors.toList());
     }
 
-
-    //edit
-    public UserDTO updateDetails(User user, String phone, String bio, MultipartFile filePath) {
-        if (phone != null && !phone.isBlank()) {
-            user.setPhone(phone);
-        }
-
-        if (bio != null && !bio.isEmpty()) {
-            user.setBio(bio);
-        }
-
-
-        userRepository.save(user);
-
-        return mapToUserDTO(user);
-    }
-
-
     public UserDTO mapToUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername(user.getUsername());
         userDTO.setPhone(user.getPhone());
-        userDTO.setBio(user.getBio());
         userDTO.setRole(user.getRole());
         return userDTO;
     }

@@ -1,7 +1,6 @@
 package com.aclib.aclib_deploy.Entity;
 
 import jakarta.persistence.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -24,9 +23,6 @@ public class User {
 
     @Column(nullable = false)
     private String phone;
-
-    @Column
-    private String bio;
 
     @Column
     private String otp;
@@ -134,14 +130,6 @@ public class User {
 
     public void setRegistrationId(String registrationId) {
         this.registrationId = registrationId;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
     }
 
 }
