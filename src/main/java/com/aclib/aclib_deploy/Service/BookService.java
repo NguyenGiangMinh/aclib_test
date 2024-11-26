@@ -26,8 +26,7 @@ public class BookService {
 
         if (!googleBooks.isEmpty()) {
             for (BookDTO book : googleBooks) {
-                result.add(new BookDTO(book.getTitle(),
-                        book.getAuthors(),
+                result.add(new BookDTO(book.getTitle(), book.getAuthors(),
                         book.getId(),
                         book.getSelfLink(),
                         book.getThumbnail(),
