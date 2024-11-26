@@ -113,7 +113,7 @@ public class UserService implements UserDetailsService {
 
     public boolean canRequestNewOtp(String registrationId) {
         User user = userRepository.findByRegistrationId(registrationId);
-        return user.getLastOTPRequest() == null || LocalDateTime.now().isAfter(user.getLastOTPRequest().plusMinutes(1));
+        return user.getLastOTPRequest() == null || LocalDateTime.now().isAfter(user.getLastOTPRequest().plusMinutes(2));
     }
 
 
