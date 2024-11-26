@@ -46,6 +46,32 @@ public class BookService {
         return result;
     }
 
+    public List<BookDTO> searchByCategory(String category) {
+        List<BookDTO> googleBooks = googleService.searchBooksWithCategory(category);
+        List<BookDTO> result = new ArrayList<>();
+
+        if (!googleBooks.isEmpty()) {
+            for (BookDTO book : googleBooks) {
+                result.add(new BookDTO(book.getTitle(),
+                        book.getAuthors(),
+                        book.getId(),
+                        book.getSelfLink(),
+                        book.getThumbnail(),
+                        book.getDescription(),
+                        book.getCategory(),
+                        book.getPublisher(),
+                        book.getPublishedDate(),
+                        book.getPageCount(),
+                        book.getLanguage(),
+                        book.isAvailableForBorrowing()));
+            }
+        } else {
+            throw new BookNotFoundException("Cannot find the book with category: " + category);
+        }
+        System.out.println("Books found by category: " + googleBooks);
+        return result;
+    }
+
     public List<BookDTO> getHomepageBooks() {
         List<Book> books = bookRepository.findRecentlyAddedBooks();
         return books.stream()

@@ -53,4 +53,15 @@ public class BookController {
 
         return ResponseEntity.ok(bookDTOFounded);
     }
+
+    //searchByCategory
+    @GetMapping("/searchingWithCategory")
+    public ResponseEntity<List<BookDTO>> getBookByCategory(@RequestParam String category) {
+        List<BookDTO> bookDTOList = bookService.searchByCategory(category);
+        if (bookDTOList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        return ResponseEntity.ok(bookDTOList);
+    }
 }

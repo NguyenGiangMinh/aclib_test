@@ -12,6 +12,8 @@ import com.aclib.aclib_deploy.ThirdPartyService.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -47,6 +49,40 @@ public class AdminService {
         book.setCopy(newCopy);
         bookRepository.save(book);
     }
+
+    public void addBookCopyPart2(String category) {
+        List<BookDTO> googleBooks = googleService.searchBooksWithCategory(category);
+
+        if (googleBooks == null || googleBooks.isEmpty()) {
+            return;
+        }
+
+        for (BookDTO bookDTO : googleBooks) {
+            Book bookInStock = bookRepository.findByIdSelfLink(bookDTO.getId());
+            if (bookInStock == null) {
+                bookInStock = mapToBook2(bookDTO, category);
+            } else {
+                bookInStock.setCopy(bookInStock.getCopy() + 1);
+            }
+
+            bookRepository.save(bookInStock);
+        }
+    }
+
+    private Book mapToBook2(BookDTO bookDTO, String category) {
+        Book book = new Book();
+        book.setTitle(bookDTO.getTitle());
+        book.setAuthor(String.join(", ", bookDTO.getAuthors()));
+        book.setThumbnail(bookDTO.getThumbnail());
+        book.setIdSelfLink(bookDTO.getId());
+        book.setSelfLink(bookDTO.getSelfLink());
+        book.setPublishDate(bookDTO.getPublishedDate());
+        book.setCategory(category);
+        book.setPublisher(bookDTO.getPublisher());
+        book.setCopy(1); // Initial copy count
+        return book;
+    }
+
 
     private Book useGoogleApiBooks (String bookId, int newCopy) {
         BookDTO bookDTO = googleService.searchByIdSelfLink(bookId);
