@@ -1,6 +1,7 @@
 package com.aclib.aclib_deploy.Entity;
 
 import jakarta.persistence.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -26,9 +27,6 @@ public class User {
 
     @Column
     private String bio;
-
-    @Column (length = 600)
-    private String avatarUrl;
 
     @Column
     private String otp;
@@ -146,13 +144,6 @@ public class User {
         this.bio = bio;
     }
 
-    public String getAvatarUrl() {
-        return avatarUrl;
-    }
-
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
-    }
 }
 
 

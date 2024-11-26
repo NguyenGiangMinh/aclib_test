@@ -16,13 +16,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -45,8 +40,6 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private EmailService emailService;
-
-    private final String UPLOAD_DIR = "src/main/resources/static/avatars/";
 
     @Override
     public UserDetails loadUserByUsername(String username) {
@@ -93,7 +86,7 @@ public class UserService implements UserDetailsService {
     public void sendOTP(User user) {
         String otpCode = generateOTPCode();
         user.setOtp(otpCode);
-        user.setExpiredTime(LocalDateTime.now().plusMinutes(10));
+        user.setExpiredTime(LocalDateTime.now().plusMinutes(3));
         user.setLastOTPRequest(LocalDateTime.now());
         userRepository.save(user);
 
@@ -118,10 +111,9 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
-
     public boolean canRequestNewOtp(String registrationId) {
         User user = userRepository.findByRegistrationId(registrationId);
-        return user.getLastOTPRequest() == null || LocalDateTime.now().isAfter(user.getLastOTPRequest().plusMinutes(5));
+        return user.getLastOTPRequest() == null || LocalDateTime.now().isAfter(user.getLastOTPRequest().plusMinutes(1));
     }
 
 
@@ -146,7 +138,6 @@ public class UserService implements UserDetailsService {
         User user = userOptional.get();
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername(user.getUsername());
-        userDTO.setAvatarUrl(user.getAvatarUrl());
         userDTO.setPhone(user.getPhone());
         userDTO.setEmail(user.getEmail());
         userDTO.setUserId(userId);
@@ -173,46 +164,23 @@ public class UserService implements UserDetailsService {
         )).collect(Collectors.toList());
     }
 
-    //save user image
-    private String saveUserAvatarFromFilePath(String filePath) {
-        File file = new File(filePath);
 
-        if (!file.exists()) {
-            throw new RuntimeException("File does not exist at the given path: " + filePath);
-        }
-
-        String fileName = UUID.randomUUID() + "_" + file.getName();
-        Path targetPath = Paths.get(UPLOAD_DIR + fileName);
-
-        try {
-            Files.createDirectories(targetPath.getParent());
-            Files.copy(file.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to save avatar from file path", e);
-        }
-        System.out.println("/avatars/" + fileName);
-        return "/avatars/" + fileName;
-    }
-
-    //editing
-    public UserDTO updateDetails(User user, String phone, String bio, String file) {
+    //edit
+    public UserDTO updateDetails(User user, String phone, String bio, MultipartFile filePath) {
         if (phone != null && !phone.isBlank()) {
             user.setPhone(phone);
         }
 
-        if (bio != null) {
+        if (bio != null && !bio.isEmpty()) {
             user.setBio(bio);
         }
 
-        if (file != null && !file.isEmpty()) {
-            String avatarUrl = saveUserAvatarFromFilePath(file);
-            user.setAvatarUrl(avatarUrl);
-        }
 
         userRepository.save(user);
 
         return mapToUserDTO(user);
     }
+
 
     public UserDTO mapToUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
@@ -220,7 +188,6 @@ public class UserService implements UserDetailsService {
         userDTO.setPhone(user.getPhone());
         userDTO.setBio(user.getBio());
         userDTO.setRole(user.getRole());
-        userDTO.setAvatarUrl(user.getAvatarUrl());
         return userDTO;
     }
 }
