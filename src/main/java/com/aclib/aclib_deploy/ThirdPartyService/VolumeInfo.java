@@ -32,7 +32,6 @@ public class VolumeInfo {
         this.authors = authors;
     }
 
-
     public ImageLinks getImageLinks() {
         return imageLinks;
     }
