@@ -25,12 +25,6 @@ public class User {
     private String phone;
 
     @Column
-    private String bio;
-
-    @Column (length = 600)
-    private String avatarUrl;
-
-    @Column
     private String otp;
 
     @Column
@@ -138,21 +132,6 @@ public class User {
         this.registrationId = registrationId;
     }
 
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    public String getAvatarUrl() {
-        return avatarUrl;
-    }
-
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
-    }
 }
 
 

@@ -7,6 +7,7 @@ import com.aclib.aclib_deploy.Service.LoanService;
 import com.aclib.aclib_deploy.Service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,11 +27,12 @@ public class LoanController {
     //borrow
     //check parameters all methods
     @PostMapping("/borrowing")
-    public ResponseEntity<Loans> borrowBook(@RequestBody BorrowRequest borrowRequest, HttpSession session) {
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<LoanDTO> borrowBook(@RequestBody BorrowRequest borrowRequest, HttpSession session) {
         String authUsername = (String) session.getAttribute("authUsername");
         User user1 = userService.findUser(authUsername);
 
-        Loans loan = loanService.borrowBook(borrowRequest.bookId, user1.getId());
+        LoanDTO loan = loanService.borrowBook(borrowRequest.bookId, user1.getId());
         if (loan == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -40,11 +42,11 @@ public class LoanController {
 
     //return
     @PostMapping("/returning")
-    public ResponseEntity<Loans> returnBook(@RequestBody ReturnRequest returnRequest, HttpSession session) {
+    public ResponseEntity<LoanDTO> returnBook(@RequestBody ReturnRequest returnRequest, HttpSession session) {
         String authUsername = (String) session.getAttribute("authUsername");
         User user1 = userService.findUser(authUsername);
 
-        Loans loan = loanService.returnBook(returnRequest.bookId, user1.getId());
+        LoanDTO loan = loanService.returnBook(returnRequest.bookId, user1.getId());
         if (loan != null) {
             return ResponseEntity.ok(loan);
         }
@@ -55,10 +57,10 @@ public class LoanController {
     // borrow again (if allowed)
     // PutMapping needed here like Update purpose?
     @PutMapping("/renewing")
-    public ResponseEntity<Loans> renewLoan(@RequestBody LoanRenewalRequest renewalRequest, HttpSession session) {
+    public ResponseEntity<LoanDTO> renewLoan(@RequestBody LoanRenewalRequest renewalRequest, HttpSession session) {
         System.out.println(session.getAttribute("authUsername"));
 
-        Loans re_loans = loanService.borrowAgain(renewalRequest.loanId());
+        LoanDTO re_loans = loanService.borrowAgain(renewalRequest.loanId());
         if (re_loans == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

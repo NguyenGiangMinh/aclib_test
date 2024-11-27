@@ -7,8 +7,6 @@ public class UserDTO {
     private String username;
     private String email;
     private String phone;
-    private String avatarUrl;
-    private String bio;
     private User.UserRole role;
 
     //constructor
@@ -42,14 +40,6 @@ public class UserDTO {
         this.userId = userId;
     }
 
-    public String getAvatarUrl() {
-        return avatarUrl;
-    }
-
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -64,14 +54,6 @@ public class UserDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
     }
 
     public User.UserRole getRole() {

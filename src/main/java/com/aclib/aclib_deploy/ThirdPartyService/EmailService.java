@@ -50,11 +50,11 @@ public class EmailService {
         mailSender.send(message1);
     }
 
-    public void makingLoanSuccessfully (String toEmail, String userName, String bookTitle, LocalDate dueDate) {
+    public void makingLoanSuccessfully (String toEmail, String userName, String bookTitle, LocalDateTime dueDate) {
         SimpleMailMessage message = new SimpleMailMessage();
 
         String subjects1 = "Notification: You successfully make an loan";
-        String message1 = "The book ' " + bookTitle + " ' was successfully borrowed by user " + userName
+        String message1 = "The book '" + bookTitle + "' was successfully borrowed by user " + userName
                 + "\n" + "Your loans will be over due date at " + dueDate
                 + "\n" + "Thanks for using our service."
                 + "\n" + "Have a nice day";
@@ -94,6 +94,20 @@ public class EmailService {
         message.setTo(toEmail);
         message.setSubject(subjects3);
         message.setText(message3);
+        message.setFrom("mlsproject2110@gmail.com");
+        mailSender.send(message);
+    }
+
+    public void returnSuccessfully(String toEmail, String userName, String bookTitle) {
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        String subject4 = "Thank you";
+        String message4 = userName + "returned the book " + bookTitle
+                +  "\n\t Thanks for using our service.";
+
+        message.setTo(toEmail);
+        message.setSubject(subject4);
+        message.setText(message4);
         message.setFrom("mlsproject2110@gmail.com");
         mailSender.send(message);
     }

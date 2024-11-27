@@ -2,7 +2,6 @@ package com.aclib.aclib_deploy.Controller;
 
 import com.aclib.aclib_deploy.DTO.UserDTO;
 import com.aclib.aclib_deploy.Service.AdminService;
-import com.aclib.aclib_deploy.Service.LoanService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +14,8 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    @Autowired
-    private LoanService loanService;
-
-
     @DeleteMapping("/book/id")
-    public ResponseEntity<Void> deleteBookFromStock(@RequestParam String BookId, HttpSession session) {
+    public ResponseEntity<Void> deleteBookFromStock(@RequestParam long BookId, HttpSession session) {
         System.out.println(session.getAttribute("authUsername"));
 
         adminService.deleteBookInStock(BookId);
@@ -28,7 +23,6 @@ public class AdminController {
     }
 
     // need requestBody for new copies
-    // adding HttpSession for all
     @PutMapping("/book/update")
     public ResponseEntity<String> updateBookIntoStock(@RequestBody updateBook book, HttpSession session) {
         System.out.println(session.getAttribute("authUsername"));
@@ -37,13 +31,10 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
-    // when user admin triggers the endpoint, the mail will be automatically sent.
-    @PostMapping("/check-overdue-loans")
-    public ResponseEntity<String> checkOverDueDateLoans(HttpSession session) {
-        System.out.println(session.getAttribute("authUsername"));
-
-        loanService.checkOverDueDateLoans();
-        return ResponseEntity.ok("Overdue loans are checked and processed successfully.");
+    @PostMapping("/add-copies")
+    public ResponseEntity<Void> addBookCopies(@RequestParam String category) {
+        adminService.addBookCopyPart2(category);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/newAdmin")

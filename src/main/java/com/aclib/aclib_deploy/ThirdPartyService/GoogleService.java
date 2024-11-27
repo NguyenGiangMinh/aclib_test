@@ -17,11 +17,25 @@ public class GoogleService {
     private static final String GOOGLE_BOOKS_API_URL_2 = "https://www.googleapis.com/books/v1/volumes/";
     private static final String API_KEY = "AIzaSyD9foUUvM-Qo_0OwEPgE6vOY-Mqvpvwi8U";
     private static final String resultCount = "&startIndex=0&maxResults=40";
+    private static final String resultCount1 = "&startIndex=0&maxResults=20";
     private static final String default_thumbnail = "https://st.quantrimang.com/photos/image/2018/12/18/Anh-Sorry-Pix-2.jpg";
 
     //Search with key
     public List<BookDTO> searchBooks(String searchQuery) {
         String url = GOOGLE_BOOKS_API_URL_1 + searchQuery + resultCount + "&key=" + API_KEY;
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<GoogleBooksResponse> response = restTemplate.getForEntity(url, GoogleBooksResponse.class);
+
+        if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+            return mapGoogleBooksToBooks(response.getBody());
+        }
+
+        return Collections.emptyList();
+    }
+
+    //Search with category
+    public List<BookDTO> searchBooksWithCategory(String searchQuery) {
+        String url = GOOGLE_BOOKS_API_URL_1 + "subject:" + searchQuery + resultCount1 + "&key=" + API_KEY;
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<GoogleBooksResponse> response = restTemplate.getForEntity(url, GoogleBooksResponse.class);
 
@@ -54,7 +68,7 @@ public class GoogleService {
                     }
 
                     String language = item.getVolumeInfo().getLanguage();
-                    boolean availableForBorrowing = item.getVolumeInfo().isAvailble();
+                    boolean availableForBorrowing = item.getVolumeInfo().isAvailable();
 
                     return new BookDTO(title, authors, id, selfLink, thumbnail,
                             description, categories ,publisher, publishedDate, pageCount, language, availableForBorrowing);
@@ -95,9 +109,11 @@ public class GoogleService {
         String description = item.getVolumeInfo().getDescription();
         int pageCount = item.getVolumeInfo().getPageCount();
         String publishDate = item.getVolumeInfo().getPublishedDate();
-        String status = "available";
+        String language = item.getVolumeInfo().getLanguage();
+        String previewLink = item.getVolumeInfo().getPreviewLink();
+        String infoLink = item.getVolumeInfo().getInfoLink();
 
         return new BookDTO(title, authors, idSelfLink, selfLink, thumbnail,
-                publisher, pageCount, description ,publishDate, status, 1);
+                publisher, pageCount, description ,publishDate, language, previewLink, infoLink, 1);
     }
 }

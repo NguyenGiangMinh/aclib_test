@@ -18,7 +18,8 @@ public class Book {
     @Column(name = "author", nullable = false)
     private String author;
 
-    @Column(name = "thumnail")
+    @Lob
+    @Column(name = "thumnail", columnDefinition = "TEXT")
     private String thumbnail;
 
     @Column(name = "id_selfLink", columnDefinition = "VARCHAR(255) NOT NULL")
@@ -32,9 +33,6 @@ public class Book {
 
     @Column(name = "publisher")
     private String publisher;
-
-    @Column(name = "status", nullable = false)
-    private String status; //available or not
 
     @Column(name = "added_date", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -62,9 +60,7 @@ public class Book {
 
     //getter and setter
 
-    public long getId() {
-        return id;
-    }
+    public long getId() { return id;}
 
     public void setId(long id) {
         this.id = id;
@@ -108,14 +104,6 @@ public class Book {
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public int getCopy() {

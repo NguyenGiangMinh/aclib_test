@@ -151,17 +151,17 @@ public class UserService implements UserDetailsService {
         return loans.stream()
                 .filter(loan -> loan.getLoanStatus() == Loans.LoanStatus.ACTIVE)
                 .map(loan -> new LoanDTO(
-                        loan.getLoansId(),
-                        loan.getUser().getId(),
-                        loan.getBook().getId(),
-                        loan.getIdSelfLink(),
-                        loan.getBookTitle(),
-                        loan.getBorrowDate(),
-                        loan.getLoanStatus().name(),
-                        loan.getReturnDate(),
-                        loan.getDueDate(),
-                        loan.getRenewalCount()
-                )).collect(Collectors.toList());
+                loan.getLoansId(),
+                loan.getUser().getId(),
+                loan.getBook().getId(),
+                loan.getIdSelfLink(),
+                loan.getBookTitle(),
+                loan.getBorrowDate(),
+                loan.getLoanStatus().name(),
+                loan.getReturnDate(),
+                loan.getDueDate(),
+                loan.getRenewalCount()
+        )).collect(Collectors.toList());
     }
 
     public UserDTO mapToUserDTO(User user) {

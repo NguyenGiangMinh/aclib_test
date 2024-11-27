@@ -12,9 +12,11 @@ public class BookDTO {
     private String publishedDate;
     private int pageCount;
     private String language;
+    private String previewLink;
+    private String infoLink;
     private boolean availableForBorrowing;
-    private String status; // available or not; fetch with book entity
     private int copy; //fetch with book entity
+    private long id_in_db;
 
     public BookDTO(String title, String[] authors,
                    String id, String selfLink,
@@ -35,9 +37,9 @@ public class BookDTO {
         this.availableForBorrowing = availableForBorrowing;
     }
 
-    public BookDTO(String title, String[] authors, String idSelfLink,
+    public BookDTO( String title, String[] authors, String idSelfLink,
                    String selfLink, String thumbnail, String publisher,
-                   String publishDate, String status,int copy) {
+                   String publishDate,int copy) {
         this.title = title;
         this.authors = authors;
         this.id = idSelfLink;
@@ -45,14 +47,13 @@ public class BookDTO {
         this.thumbnail = thumbnail;
         this.publisher = publisher;
         this.publishedDate = publishDate;
-        this.status = status;
         this.copy = copy;
     }
 
 
     public BookDTO(String title, String[] authors, String idSelfLink,
                    String selfLink, String thumbnail, String publisher, int pageCount,
-                   String description, String publishDate, String status,int copy) {
+                   String description, String publishDate, String language, String previewLink, String infoLink, int copy) {
         this.title = title;
         this.authors = authors;
         this.id = idSelfLink;
@@ -62,10 +63,25 @@ public class BookDTO {
         this.pageCount = pageCount;
         this.description = description;
         this.publishedDate = publishDate;
-        this.status = status;
+        this.language = language;
+        this.previewLink = previewLink;
+        this.infoLink = infoLink;
         this.copy = copy;
     }
 
+    public BookDTO(long id_in_db, String title, String[] authors, String idSelfLink,
+                    String selfLink, String thumbnail, String publisher,
+                    String publishDate,int copy) {
+        this.id_in_db = id_in_db;
+        this.title = title;
+        this.authors = authors;
+        this.id = idSelfLink;
+        this.selfLink = selfLink;
+        this.thumbnail = thumbnail;
+        this.publisher = publisher;
+        this.publishedDate = publishDate;
+        this.copy = copy;
+    }
 
     //Getter and Setter
     public String getTitle() {
@@ -164,15 +180,19 @@ public class BookDTO {
         this.copy = copy;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String[] getCategory() {return category; }
 
     public void setCategory(String[] category) {this.category = category; }
+
+    public String getInfoLink() { return infoLink; }
+
+    public void setInfoLink(String infoLink) { this.infoLink = infoLink; }
+
+    public String getPreviewLink() { return previewLink; }
+
+    public void setPreviewLink(String previewLink) { this.previewLink = previewLink; }
+
+    public long getId_in_db() { return id_in_db; }
+
+    public void setId_in_db(long id_in_db) { this.id_in_db = id_in_db; }
 }

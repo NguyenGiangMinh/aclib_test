@@ -1,7 +1,7 @@
 package com.aclib.aclib_deploy.Entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "aclib_loans")
@@ -11,11 +11,11 @@ public class Loans {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long loansId;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "book_id", referencedColumnName = "id_selfLink", columnDefinition = "VARCHAR(255) NOT NULL")
     private Book book;
 
@@ -26,7 +26,11 @@ public class Loans {
     private String bookTitle;
 
     @Column(nullable = false)
-    private LocalDate borrowDate;
+    private LocalDateTime borrowDate;
+
+    public Loans(long l, LocalDateTime localDateTime, Object o, int i, Object o1, LoanStatus loanStatus) {}
+
+    public Loans() {}
 
     public enum LoanStatus {
         ACTIVE,
@@ -40,14 +44,14 @@ public class Loans {
     private LoanStatus loanStatus = LoanStatus.ACTIVE;
 
     @Column()
-    private LocalDate returnDate;
+    private LocalDateTime returnDate;
 
     @Column(nullable = false)
-    private LocalDate dueDate;
+    private LocalDateTime dueDate;
 
     private int renewalCount = 0;
 
-    private LocalDate notificationSentDate;
+    private LocalDateTime notificationSentDate;
 
     //getter and setter
     public long getLoansId() {
@@ -82,27 +86,27 @@ public class Loans {
         this.bookTitle = bookTitle;
     }
 
-    public LocalDate getBorrowDate() {
+    public LocalDateTime getBorrowDate() {
         return borrowDate;
     }
 
-    public void setBorrowDate(LocalDate borrowDate) {
+    public void setBorrowDate(LocalDateTime borrowDate) {
         this.borrowDate = borrowDate;
     }
 
-    public LocalDate getDueDate() {
+    public LocalDateTime getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDate dueDate) {
+    public void setDueDate(LocalDateTime dueDate) {
         this.dueDate = dueDate;
     }
 
-    public LocalDate getReturnDate() {
+    public LocalDateTime getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate(LocalDate returnDate) {
+    public void setReturnDate(LocalDateTime returnDate) {
         this.returnDate = returnDate;
     }
 
@@ -114,11 +118,11 @@ public class Loans {
         this.renewalCount = renewalCount;
     }
 
-    public LocalDate getNotificationSentDate() {
+    public LocalDateTime getNotificationSentDate() {
         return notificationSentDate;
     }
 
-    public void setNotificationSentDate(LocalDate notificationSentDate) {
+    public void setNotificationSentDate(LocalDateTime notificationSentDate) {
         this.notificationSentDate = notificationSentDate;
     }
 

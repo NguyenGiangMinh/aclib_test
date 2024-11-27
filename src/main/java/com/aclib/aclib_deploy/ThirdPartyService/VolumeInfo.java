@@ -10,7 +10,9 @@ public class VolumeInfo {
     private String[] categories;
     private int pageCount;
     private String language;
-    private boolean availble;
+    private String previewLink;
+    private String infoLink;
+    private boolean available;
 
 
     // Getters and setters
@@ -30,7 +32,6 @@ public class VolumeInfo {
         this.authors = authors;
     }
 
-
     public ImageLinks getImageLinks() {
         return imageLinks;
     }
@@ -38,7 +39,6 @@ public class VolumeInfo {
     public void setImageLinks(ImageLinks imageLinks) {
         this.imageLinks = imageLinks;
     }
-
 
     public String getDescription() {
         return description;
@@ -80,15 +80,23 @@ public class VolumeInfo {
         this.language = language;
     }
 
-    public boolean isAvailble() {
-        return availble;
+    public boolean isAvailable() {
+        return available;
     }
 
-    public void setAvailble(boolean availble) {
-        this.availble = availble;
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 
     public String[] getCategories() {return categories; }
 
     public void setCategories(String[] categories) {this.categories = categories; }
+
+    public String getInfoLink() { return infoLink; }
+
+    public void setInfoLink(String infoLink) { this.infoLink = infoLink; }
+
+    public String getPreviewLink() { return previewLink; }
+
+    public void setPreviewLink(String previewLink) { this.previewLink = previewLink; }
 }
