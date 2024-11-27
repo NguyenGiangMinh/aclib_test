@@ -2,10 +2,12 @@ package com.aclib.aclib_deploy.Service;
 
 import com.aclib.aclib_deploy.Entity.Book;
 import com.aclib.aclib_deploy.DTO.BookDTO;
+import com.aclib.aclib_deploy.Entity.Loans;
 import com.aclib.aclib_deploy.Entity.User;
 import com.aclib.aclib_deploy.DTO.UserDTO;
 import com.aclib.aclib_deploy.Exception.BookNotFoundException;
 import com.aclib.aclib_deploy.Repository.BookRepository;
+import com.aclib.aclib_deploy.Repository.LoanRepository;
 import com.aclib.aclib_deploy.Repository.UserRepository;
 import com.aclib.aclib_deploy.ThirdPartyService.EmailAsyncService;
 import com.aclib.aclib_deploy.ThirdPartyService.GoogleService;
@@ -28,15 +30,23 @@ public class AdminService {
     private GoogleService googleService;
 
     @Autowired
+    private LoanRepository loanRepository;
+
+    @Autowired
     private EmailAsyncService emailAsyncService;
 
     public void deleteBookInStock(long id) {
         Optional<Book> book = bookRepository.findById(id);
 
-
         if (book == null) {
             throw new BookNotFoundException(String.valueOf(id));
         }
+
+        Loans loan = loanRepository.findByBookId(book.get().getId());
+        if (loan != null) {
+            loanRepository.delete(loan);
+        }
+
         bookRepository.delete(book.get());
     }
 

@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public interface LoanRepository extends JpaRepository<Loans, Long> {
+    Loans findByBookId(Long bookId);
 
     @Query("SELECT l FROM Loans l WHERE l.book.idSelfLink = :bookId AND l.user.id = :userId")
     Loans findByIdSelfLinkAndUserId(@Param("bookId") String bookId, @Param("userId") Long userId);

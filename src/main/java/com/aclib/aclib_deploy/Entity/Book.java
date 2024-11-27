@@ -60,9 +60,7 @@ public class Book {
 
     //getter and setter
 
-    public long getId() {
-        return id;
-    }
+    public long getId() { return id;}
 
     public void setId(long id) {
         this.id = id;
