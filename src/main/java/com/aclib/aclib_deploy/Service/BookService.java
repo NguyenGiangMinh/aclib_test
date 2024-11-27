@@ -102,7 +102,23 @@ public class BookService {
             return bookDTO;
         }
 
-        return convertToDTO(book);
+        return convertToDTO1(book);
+    }
+
+    private BookDTO convertToDTO1(Book book) {
+        BookDTO bookDTO = new BookDTO(
+                book.getId(),
+                book.getTitle(),
+                new String[]{book.getAuthor()},
+                book.getIdSelfLink(),
+                book.getSelfLink(),
+                book.getThumbnail(),
+                book.getPublisher(),
+                book.getPublishDate(),
+                book.getCopy());
+
+        bookDTO.setAvailableForBorrowing(true);
+        return bookDTO;
     }
 }
 

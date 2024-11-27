@@ -16,6 +16,7 @@ public class BookDTO {
     private String infoLink;
     private boolean availableForBorrowing;
     private int copy; //fetch with book entity
+    private long id_in_db;
 
     public BookDTO(String title, String[] authors,
                    String id, String selfLink,
@@ -36,7 +37,7 @@ public class BookDTO {
         this.availableForBorrowing = availableForBorrowing;
     }
 
-    public BookDTO(String title, String[] authors, String idSelfLink,
+    public BookDTO( String title, String[] authors, String idSelfLink,
                    String selfLink, String thumbnail, String publisher,
                    String publishDate,int copy) {
         this.title = title;
@@ -68,6 +69,19 @@ public class BookDTO {
         this.copy = copy;
     }
 
+    public BookDTO(long id_in_db, String title, String[] authors, String idSelfLink,
+                    String selfLink, String thumbnail, String publisher,
+                    String publishDate,int copy) {
+        this.id_in_db = id_in_db;
+        this.title = title;
+        this.authors = authors;
+        this.id = idSelfLink;
+        this.selfLink = selfLink;
+        this.thumbnail = thumbnail;
+        this.publisher = publisher;
+        this.publishedDate = publishDate;
+        this.copy = copy;
+    }
 
     //Getter and Setter
     public String getTitle() {
@@ -177,4 +191,8 @@ public class BookDTO {
     public String getPreviewLink() { return previewLink; }
 
     public void setPreviewLink(String previewLink) { this.previewLink = previewLink; }
+
+    public long getId_in_db() { return id_in_db; }
+
+    public void setId_in_db(long id_in_db) { this.id_in_db = id_in_db; }
 }

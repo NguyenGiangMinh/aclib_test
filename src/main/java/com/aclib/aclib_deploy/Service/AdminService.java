@@ -32,6 +32,8 @@ public class AdminService {
 
     public void deleteBookInStock(long id) {
         Optional<Book> book = bookRepository.findById(id);
+
+
         if (book == null) {
             throw new BookNotFoundException(String.valueOf(id));
         }
