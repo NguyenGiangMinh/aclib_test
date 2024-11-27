@@ -9,7 +9,7 @@ import com.aclib.aclib_deploy.Exception.UserNotFoundException;
 import com.aclib.aclib_deploy.Repository.UserRepository;
 import com.aclib.aclib_deploy.Repository.LoanRepository;
 import com.aclib.aclib_deploy.Repository.BookRepository;
-import com.aclib.aclib_deploy.ThirdPartyService.EmailService;
+import com.aclib.aclib_deploy.ThirdPartyService.EmailAsyncService;
 import com.aclib.aclib_deploy.Exception.BookNotFoundException;
 import com.aclib.aclib_deploy.Exception.LoanNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class LoanService {
     private BookRepository bookRepository;
 
     @Autowired
-    private EmailService emailService;
+    private EmailAsyncService emailAsyncService;
 
     private static final int BORROW_PERIOD_DATE = 150;
     private static final int BORROW_PERIOD_DATE_NEW = 30;
@@ -93,9 +93,8 @@ public class LoanService {
             loan.setDueDate(LocalDateTime.now().plusMinutes(BORROW_PERIOD_MINUTES)); //test
             loanRepository.save(loan);
 
-            emailService.makingLoanSuccessfully(optionalUser.get().getEmail(),
+            emailAsyncService.sendEmailAsyncMakingLoanSuccessfully(optionalUser.get().getEmail(),
                     optionalUser.get().getUsername(), book.getTitle(), loan.getDueDate());
-
             return convertToDTO(loan);
         } else {
 
@@ -110,7 +109,7 @@ public class LoanService {
             existedLoan.setReturnDate(null);
             loanRepository.save(existedLoan);
 
-            emailService.makingLoanSuccessfully(optionalUser.get().getEmail(),
+            emailAsyncService.sendEmailAsyncMakingLoanSuccessfully(optionalUser.get().getEmail(),
                     optionalUser.get().getUsername(), book.getTitle(), existedLoan.getDueDate());
 
             return convertToDTO(existedLoan);
@@ -132,7 +131,7 @@ public class LoanService {
         loanRepository.save(loan);
         book.setCopy(book.getCopy() + 1);
         bookRepository.save(book);
-        emailService.returnSuccessfully(user.getEmail(), user.getUsername(), book.getTitle());
+        emailAsyncService.sendEmailAsyncReturnSuccessfully(user.getEmail(), user.getUsername(), book.getTitle());
 
         return convertToDTO(loan);
     }
@@ -198,7 +197,7 @@ public class LoanService {
 
 
     private void sendNotifications(User user, Loans loan) {
-        emailService.sendOverdueNotification(user.getEmail(), user.getUsername(), loan.getBook().getTitle());
+        emailAsyncService.sendEmailAsyncOverdue(user.getEmail(), user.getUsername(), loan.getBook().getTitle());
         System.out.println("Notification sent to: " + user.getEmail());
     }
 
@@ -234,7 +233,7 @@ public class LoanService {
         book.setCopy(book.getCopy() - 1); //check
         bookRepository.save(book);
 
-        emailService.sendAutoReturn(loan.getUser().getEmail(), loan.getUser().getUsername(), loan.getBookTitle());
+        emailAsyncService.sendEmailAsyncAutoReturn(loan.getUser().getEmail(), loan.getUser().getUsername(), loan.getBookTitle());
         System.out.println("Notification sent to " + loan.getUser().getEmail());
     }
 
@@ -252,7 +251,7 @@ public class LoanService {
         //Send to all administrators
         List<User> adminUsers = userRepository.findAllByRole(User.UserRole.ROLE_ADMIN);
         for (User admin : adminUsers) {
-            emailService.notifyAdminOfLostBook(admin.getEmail(), admin.getUsername(), loan.getBookTitle());
+            emailAsyncService.setEmailAsyncNotifyAdminOfLostBook(admin.getEmail(), admin.getUsername(), loan.getBookTitle());
         }
 
         System.out.println("Marked loan as lost and notified admin.");

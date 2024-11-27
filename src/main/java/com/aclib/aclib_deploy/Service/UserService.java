@@ -7,7 +7,7 @@ import com.aclib.aclib_deploy.Entity.UserInfo;
 import com.aclib.aclib_deploy.DTO.UserDTO;
 import com.aclib.aclib_deploy.Repository.LoanRepository;
 import com.aclib.aclib_deploy.Repository.UserRepository;
-import com.aclib.aclib_deploy.ThirdPartyService.EmailService;
+import com.aclib.aclib_deploy.ThirdPartyService.EmailAsyncService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,7 +38,7 @@ public class UserService implements UserDetailsService {
     private LoanRepository loanRepository;
 
     @Autowired
-    private EmailService emailService;
+    private EmailAsyncService emailAsyncService;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
@@ -89,7 +89,7 @@ public class UserService implements UserDetailsService {
         user.setLastOTPRequest(LocalDateTime.now());
         userRepository.save(user);
 
-        emailService.sendOTPNotifications(user.getEmail(),
+        emailAsyncService.sendEmailAsyncSendOTPSuccessfully(user.getEmail(),
                 user.getUsername() ,user.getOtp(), user.getRegistrationId() ,user.getExpiredTime());
     }
 

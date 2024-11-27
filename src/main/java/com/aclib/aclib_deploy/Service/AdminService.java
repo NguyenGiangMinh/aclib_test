@@ -7,12 +7,11 @@ import com.aclib.aclib_deploy.DTO.UserDTO;
 import com.aclib.aclib_deploy.Exception.BookNotFoundException;
 import com.aclib.aclib_deploy.Repository.BookRepository;
 import com.aclib.aclib_deploy.Repository.UserRepository;
+import com.aclib.aclib_deploy.ThirdPartyService.EmailAsyncService;
 import com.aclib.aclib_deploy.ThirdPartyService.GoogleService;
-import com.aclib.aclib_deploy.ThirdPartyService.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +28,7 @@ public class AdminService {
     private GoogleService googleService;
 
     @Autowired
-    private EmailService emailService;
+    private EmailAsyncService emailAsyncService;
 
     public void deleteBookInStock(long id) {
         Optional<Book> book = bookRepository.findById(id);
@@ -110,7 +109,7 @@ public class AdminService {
         user.setRole(User.UserRole.ROLE_ADMIN);
         userRepository.save(user);
 
-        emailService.sendRoleUpdateNotifications(user.getEmail(), user.getUsername(), "Admin");
+        emailAsyncService.sendEmailAsyncSendRoleUpdateNotifications(user.getEmail(), user.getUsername(), "Admin");
 
         return new UserDTO(
                 user.getId(),
