@@ -68,7 +68,7 @@ public class GoogleService {
                     }
 
                     String language = item.getVolumeInfo().getLanguage();
-                    boolean availableForBorrowing = item.getVolumeInfo().isAvailble();
+                    boolean availableForBorrowing = item.getVolumeInfo().isAvailable();
 
                     return new BookDTO(title, authors, id, selfLink, thumbnail,
                             description, categories ,publisher, publishedDate, pageCount, language, availableForBorrowing);
@@ -109,8 +109,11 @@ public class GoogleService {
         String description = item.getVolumeInfo().getDescription();
         int pageCount = item.getVolumeInfo().getPageCount();
         String publishDate = item.getVolumeInfo().getPublishedDate();
+        String language = item.getVolumeInfo().getLanguage();
+        String previewLink = item.getVolumeInfo().getPreviewLink();
+        String infoLink = item.getVolumeInfo().getInfoLink();
 
         return new BookDTO(title, authors, idSelfLink, selfLink, thumbnail,
-                publisher, pageCount, description ,publishDate, 0);
+                publisher, pageCount, description ,publishDate, language, previewLink, infoLink, 1);
     }
 }
