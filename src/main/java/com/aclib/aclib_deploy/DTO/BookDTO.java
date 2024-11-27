@@ -12,6 +12,8 @@ public class BookDTO {
     private String publishedDate;
     private int pageCount;
     private String language;
+    private String previewLink;
+    private String infoLink;
     private boolean availableForBorrowing;
     private int copy; //fetch with book entity
 
@@ -50,7 +52,7 @@ public class BookDTO {
 
     public BookDTO(String title, String[] authors, String idSelfLink,
                    String selfLink, String thumbnail, String publisher, int pageCount,
-                   String description, String publishDate, int copy) {
+                   String description, String publishDate, String language, String previewLink, String infoLink, int copy) {
         this.title = title;
         this.authors = authors;
         this.id = idSelfLink;
@@ -60,6 +62,9 @@ public class BookDTO {
         this.pageCount = pageCount;
         this.description = description;
         this.publishedDate = publishDate;
+        this.language = language;
+        this.previewLink = previewLink;
+        this.infoLink = infoLink;
         this.copy = copy;
     }
 
@@ -164,4 +169,12 @@ public class BookDTO {
     public String[] getCategory() {return category; }
 
     public void setCategory(String[] category) {this.category = category; }
+
+    public String getInfoLink() { return infoLink; }
+
+    public void setInfoLink(String infoLink) { this.infoLink = infoLink; }
+
+    public String getPreviewLink() { return previewLink; }
+
+    public void setPreviewLink(String previewLink) { this.previewLink = previewLink; }
 }
