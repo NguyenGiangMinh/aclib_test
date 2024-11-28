@@ -5,7 +5,6 @@ import com.aclib.aclib_deploy.DTO.RegistrationResponse;
 import com.aclib.aclib_deploy.Entity.User;
 import com.aclib.aclib_deploy.Service.UserService;
 import com.aclib.aclib_deploy.ThirdPartyService.JsonService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +38,6 @@ public class RegisterController {
             if (registerRequest.role() != null) {
                 String role = registerRequest.role().trim().toUpperCase();
 
-                // Check for 'ADMIN' role and validate the admin code
                 if ("ADMIN".equals(role) && !ADMIN_REGISTRATION_CODE.equals(registerRequest.adminCode())) {
                     return ResponseEntity.status(HttpStatus.FORBIDDEN)
                             .body(new RegistrationResponse(null, "Invalid admin code. "
@@ -54,7 +52,6 @@ public class RegisterController {
                                     + " Please use 'user' or 'admin'."));
                 }
             } else {
-                // Set the default role if not provided
                 newUser.setRole(User.UserRole.ROLE_USER);
             }
 
