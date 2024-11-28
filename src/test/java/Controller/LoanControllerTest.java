@@ -24,8 +24,11 @@ import static org.mockito.Mockito.when;
 
 public class LoanControllerTest {
     private LoanController loanController;
+
     private LoanService loanService;
+
     private UserService userService;
+
     private HttpSession session;
 
     @BeforeEach

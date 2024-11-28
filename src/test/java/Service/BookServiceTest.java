@@ -19,7 +19,9 @@ import static org.mockito.Mockito.when;
 
 public class BookServiceTest {
     private BookService bookService;
+
     private GoogleService googleService;
+
     private BookRepository bookRepository;
 
     @BeforeEach
@@ -61,6 +63,27 @@ public class BookServiceTest {
     }
 
     @Test
+    public void testSearchByCategory() {
+        String category = "Fiction";
+        List<BookDTO> googleBooks = new ArrayList<>();
+        googleBooks.add(new BookDTO("Harry Potter and the Philosopher's Stone", new String[]{"author1", "author2"}, "123", "selfLink", "thumbnail", "description", new String[]{category}, "publisher", "publishedDate", 300, "en", true));
+        when(googleService.searchBooksWithCategory(category)).thenReturn(googleBooks);
+        List<BookDTO> result = bookService.searchByCategory(category);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("Harry Potter and the Philosopher's Stone", result.get(0).getTitle());
+        assertArrayEquals(new String[]{category}, result.get(0).getCategory());
+        assertEquals("author1", result.get(0).getAuthors()[0]);
+        assertEquals("thumbnail", result.get(0).getThumbnail());
+        assertEquals("publisher", result.get(0).getPublisher());
+        assertEquals("publishedDate", result.get(0).getPublishedDate());
+
+        when(googleService.searchBooksWithCategory(category)).thenReturn(new ArrayList<>());
+        assertThrows(BookNotFoundException.class, () -> bookService.searchByCategory(category));
+    }
+
+    @Test
     public void testGetHomepageBooks() {
         when(bookRepository.findRecentlyAddedBooks()).thenReturn(new ArrayList<>());
         List<BookDTO> result = bookService.getHomepageBooks();
@@ -86,5 +109,11 @@ public class BookServiceTest {
 
         assertNotNull(result);
         assertEquals("Harry Potter and the Philosopher's Stone", result.getTitle());
+        assertEquals(1, result.getCopy());
+        assertEquals(true, result.isAvailableForBorrowing());
+        assertEquals("author1, author2", result.getAuthors()[0]);
+        assertEquals("thumbnail", result.getThumbnail());
+        assertEquals("publisher", result.getPublisher());
+        assertEquals("publishedDate", result.getPublishedDate());
     }
 }

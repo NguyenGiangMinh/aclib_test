@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class UserInfoTest {
     private UserInfo userInfo;
+
     private UserInfo userInfo1;
 
     @BeforeEach

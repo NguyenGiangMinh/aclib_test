@@ -42,6 +42,7 @@ public class UserTest {
         user.setUsername("NGM");
         assertEquals("NGM", user.getUsername());
     }
+
     @Test
     public void testsetPassword() {
         user.setPassword("123456abc@");

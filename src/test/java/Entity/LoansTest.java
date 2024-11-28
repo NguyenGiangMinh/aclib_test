@@ -14,7 +14,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LoansTest {
     private Loans loan;
+
     private Book book;
+
     private User user;
 
     @BeforeEach

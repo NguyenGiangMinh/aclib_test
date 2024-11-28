@@ -115,7 +115,7 @@ public class EmailServiceTest {
         SimpleMailMessage message = argument.getValue();
         assertEquals(toEmail, message.getTo()[0]);
         assertEquals("Notification: You successfully make an loan", message.getSubject());
-        assertEquals( "The book '" + bookTitle + "' was successfully borrowed by user " + userName
+        assertEquals("The book '" + bookTitle + "' was successfully borrowed by user " + userName
                 + "\n" + "Your loans will be over due date at " + dueDate
                 + "\n" + "Thanks for using our service."
                 + "\n" + "Have a nice day", message.getText());

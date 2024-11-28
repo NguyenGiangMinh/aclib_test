@@ -17,7 +17,9 @@ import static org.mockito.Mockito.when;
 
 public class RegisterControllerTest {
     private RegisterController registerController;
+
     private UserService userService;
+
     private JsonService jsonService;
 
     @BeforeEach

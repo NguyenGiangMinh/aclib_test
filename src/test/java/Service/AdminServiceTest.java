@@ -9,7 +9,6 @@ import com.aclib.aclib_deploy.Repository.LoanRepository;
 import com.aclib.aclib_deploy.Repository.UserRepository;
 import com.aclib.aclib_deploy.Service.AdminService;
 import com.aclib.aclib_deploy.ThirdPartyService.EmailAsyncService;
-import com.aclib.aclib_deploy.ThirdPartyService.EmailService;
 import com.aclib.aclib_deploy.ThirdPartyService.GoogleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,10 +22,15 @@ import static org.mockito.Mockito.*;
 
 public class AdminServiceTest {
     private AdminService adminService;
+
     private BookRepository bookRepository;
+
     private GoogleService googleService;
+
     private UserRepository userRepository;
+
     private LoanRepository loanRepository;
+
     private EmailAsyncService emailAsyncService;
 
     @BeforeEach

@@ -18,7 +18,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class GoogleServiceTest {
+
     private GoogleService googleService;
+
     private RestTemplate restTemplate;
 
     @BeforeEach

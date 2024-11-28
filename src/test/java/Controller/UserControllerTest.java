@@ -18,7 +18,9 @@ import static org.mockito.Mockito.when;
 
 public class UserControllerTest {
     private UserController userController;
+
     private UserService userService;
+
     private HttpSession session;
 
     @BeforeEach

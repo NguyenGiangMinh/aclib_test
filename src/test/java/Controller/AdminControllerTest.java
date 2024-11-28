@@ -18,7 +18,9 @@ import static org.mockito.Mockito.when;
 
 public class AdminControllerTest {
     private AdminController adminController;
+
     private AdminService adminService;
+
     private HttpSession session;
 
     @BeforeEach

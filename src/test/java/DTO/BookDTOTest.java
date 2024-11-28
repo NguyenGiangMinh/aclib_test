@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class BookDTOTest {
     private BookDTO bookDTO;
+
     private BookDTO bookDTO1;
 
     @BeforeEach

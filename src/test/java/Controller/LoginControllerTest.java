@@ -24,9 +24,13 @@ import static org.mockito.Mockito.when;
 
 public class LoginControllerTest {
     private LoginController loginController;
+
     private UserService userService;
+
     private AuthenticationManager authenticationManager;
+
     private HttpSession session;
+
     private HttpServletRequest request;
 
     @BeforeEach

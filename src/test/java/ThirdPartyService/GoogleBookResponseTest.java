@@ -12,8 +12,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class GoogleBookResponseTest {
+
     private GoogleBooksResponse googleBooksResponse;
+
     private VolumeInfo volumeInfo;
+
     private GoogleBooksResponse.Item item;
 
     @BeforeEach

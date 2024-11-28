@@ -15,6 +15,6 @@ public class ImageLinksTest {
     @Test
     public void testSetAndGetThumbnail() {
         imageLinks.setThumbnail("thumbnail");
-        assert(imageLinks.getThumbnail().equals("thumbnail"));
+        assert (imageLinks.getThumbnail().equals("thumbnail"));
     }
 }
