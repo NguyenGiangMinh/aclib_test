@@ -7,16 +7,15 @@ This is the backend service for a library management system built with Spring Bo
 -
 
 ## UML Diagram
-[Image UML](https://github.com/user-attachments/assets/a6e4aefd-d41e-4242-9248-6a8a9312b667)
+- [Image UML](https://github.com/user-attachments/assets/a6e4aefd-d41e-4242-9248-6a8a9312b667)
 
 ## Design pattern
-MVC pattern. [MVC Structure](https://github.com/user-attachments/assets/5f252ac0-66d2-43b3-bd52-bfd27cc850b3)
+- View MVC pattern. [MVC Structure](https://github.com/user-attachments/assets/5f252ac0-66d2-43b3-bd52-bfd27cc850b3)
 
-The application follows the MVC pattern:
-
-Model: book, user, loan
-View: Frontend integration with endpoints
-Controller: RESTful APIs for interaction
+- The application follows the MVC pattern:
+    - Model: book, user, loan
+    - View: Frontend integration with endpoints
+    - Controller: RESTful APIs for interaction
 
 ## Features
 Email Notifications
@@ -53,58 +52,56 @@ The server will automatically check the loan list and send the email to notify t
 When the user recieved, they can choose to make a new loan or return the book. On the other hand, if they do not act anything from a time that we set, the book will be labeled with "LOST" 
 and an email will be sent to all adminstrators. From that, the admintrator can decide what they have to do after that. 
 
-Borrowing period: 150 days (new users: 30 days)
-Notify users: 10 days after due date.
-Renewal limit: 1 time.
-Testing Timeframes:
-- Borrowing period: 3 minutes
-- Notify users: 2 minutes.
+- Borrowing period: 150 days (new users: 30 days)
+- Notify users: 10 days after due date.
+- Renewal limit: 1 time.
+- Testing Timeframes:
+    - Borrowing period: 3 minutes
+    - Notify users: 2 minutes.
 
 ## Key Endpoints
 
 1. User Endpoints
-GET /mls_user/profile - Retrieve user profile.
+    - GET /mls_user/profile - Retrieve user profile.
 2. Register Endpoints
-POST /register
-POST /verifying_otp
-POST /resenting_otp
+    - POST /register
+    - POST /verifying_otp
+    - POST /resenting_otp
 4. Login Endpoints
-POST /login - enter login
-GET /auth/user - support frontend only
+    - POST /login - enter login
+    - GET /auth/user - support frontend only
 5. Admin Endpoints
-POST /admin/book/add-copies - Add a number of books.
-PUT /admin/book/update - Update book details.
-DELETE //admin/book/id?BookId=<Id_in_db> - Delete a book by ID.
-POST /admin/newAdmin - make a regular to administrator.
+    - POST /admin/book/add-copies - Add a number of books.
+    - PUT /admin/book/update - Update book details.
+    - DELETE //admin/book/id?BookId=<Id_in_db> - Delete a book by ID.
+    - POST /admin/newAdmin - make a regular to administrator.
 7. Book Endpoints
-GET /api/book/searching?title=<your_book_title> - search with title.
-GET /api/book/searchingWithId?id=<your_book_id> - seach with ID (ID here is the id for self_link of google)
-GET /api/book/searchingWithCategory?category=<your_book_category> - search with book's category.
-GET /api/book/homepage - homepage of my team's web application
+    - GET /api/book/searching?title=<your_book_title> - search with title.
+    - GET /api/book/searchingWithId?id=<your_book_id> - seach with ID (ID here is the id for self_link of google)
+    - GET /api/book/searchingWithCategory?category=<your_book_category> - search with book's category.
+    - GET /api/book/homepage - homepage of my team's web application
 8. Loan Endpoints
-POST /api/loan/borrowing - Borrow a book.
-POST /api/loan/returning - Return a book.
-PUT /api/loan/renewing - Renew a loan. (just test with postman)
-GET /api/loan/loanDeals - View loans for a specific user.
+    - POST /api/loan/borrowing - Borrow a book.
+    - POST /api/loan/returning - Return a book.
+    - PUT /api/loan/renewing - Renew a loan. (just test with postman)
+    - GET /api/loan/loanDeals - View loans for a specific user.
 
-CORS Configuration
-The backend allows cross-origin requests from:
+ * CORS Configuration
+ * The backend allows cross-origin requests from:
 
 ## Frontend
 
-Frontend: http://localhost:5173 .
-To enable this, a global CORS configuration is implemented.
+- Frontend: http://localhost:5173 .
+- To enable this, a global CORS configuration is implemented.
 
 ## Testing - Giang minh:
 
 
 ## Requirements
-Java 17 or higher: (recommend using IntelliJ)
-Spring Boot 3.x
-MySQL for database
-SMTP for email notifications
-Setup
-Clone the repository:
+- Java 17 or higher: (recommended: IntelliJ IDE)
+- Spring Boot 3.x
+- MySQL for database
+- SMTP for email notifications
 
 ## Notes
 1.The database is automatically created on the first run.
