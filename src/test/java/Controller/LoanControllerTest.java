@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,18 +52,18 @@ public class LoanControllerTest {
         idField.setAccessible(true);
         idField.set(user, 1L);
 
-        Loans loan = new Loans();
+        LoanDTO loan = new LoanDTO(1L, 1L, 1L, "bookTitle", "author", LocalDateTime.now(), "status", LocalDateTime.now(), LocalDateTime.now(), 1);
 
         when(session.getAttribute("authUsername")).thenReturn("username");
         when(userService.findUser("username")).thenReturn(user);
         when(loanService.borrowBook("bookId", 1L)).thenReturn(loan);
 
-        ResponseEntity<Loans> response = loanController.borrowBook(borrowRequest, session);
+        ResponseEntity<LoanDTO> response = loanController.borrowBook(borrowRequest, session);
 
         assertEquals(ResponseEntity.ok(loan), response);
 
         when(loanService.borrowBook("bookId", 1L)).thenReturn(null);
-        ResponseEntity<Loans> response2 = loanController.borrowBook(borrowRequest, session);
+        ResponseEntity<LoanDTO> response2 = loanController.borrowBook(borrowRequest, session);
         assertEquals(ResponseEntity.status(HttpStatus.NOT_FOUND).build(), response2);
     }
 
@@ -74,36 +75,36 @@ public class LoanControllerTest {
         idField.setAccessible(true);
         idField.set(user, 1L);
 
-        Loans loan = new Loans();
+        LoanDTO loan = new LoanDTO(1L, 1L, 1L, "bookTitle", "author", LocalDateTime.now(), "status", LocalDateTime.now(), LocalDateTime.now(), 1);
 
         when(session.getAttribute("authUsername")).thenReturn("username");
         when(userService.findUser("username")).thenReturn(user);
         when(loanService.returnBook("bookId", 1L)).thenReturn(loan);
 
-        ResponseEntity<Loans> response = loanController.returnBook(returnRequest, session);
+        ResponseEntity<LoanDTO> response = loanController.returnBook(returnRequest, session);
 
         assertEquals(ResponseEntity.ok(loan), response);
 
         when(loanService.returnBook("bookId", 1L)).thenReturn(null);
-        ResponseEntity<Loans> response2 = loanController.returnBook(returnRequest, session);
+        ResponseEntity<LoanDTO> response2 = loanController.returnBook(returnRequest, session);
         assertEquals(ResponseEntity.status(HttpStatus.NOT_FOUND).build(), response2);
     }
 
     @Test
     public void testRenewLoan() throws Exception {
         LoanController.LoanRenewalRequest renewalRequest = new LoanController.LoanRenewalRequest(1L);
-        Loans loan = new Loans();
+        LoanDTO loan = new LoanDTO(1L, 1L, 1L, "bookTitle", "author", LocalDateTime.now(), "status", LocalDateTime.now(), LocalDateTime.now(), 1);
 
         when(session.getAttribute("authUsername")).thenReturn("username");
         when(loanService.borrowAgain(1L)).thenReturn(loan);
 
-        ResponseEntity<Loans> response = loanController.renewLoan(renewalRequest, session);
+        ResponseEntity<LoanDTO> response = loanController.renewLoan(renewalRequest, session);
 
         assertEquals(ResponseEntity.ok(loan), response);
 
         when(loanService.borrowAgain(1L)).thenReturn(null);
 
-        ResponseEntity<Loans> response2 = loanController.renewLoan(renewalRequest, session);
+        ResponseEntity<LoanDTO> response2 = loanController.renewLoan(renewalRequest, session);
 
         assertEquals(ResponseEntity.status(HttpStatus.NOT_FOUND).build(), response2);
     }
@@ -115,7 +116,7 @@ public class LoanControllerTest {
         idField.setAccessible(true);
         idField.set(user, 1L);
         List<LoanDTO> loans = List.of(
-                new LoanDTO(1L, 1L, 1L, "bookTitle", "author", LocalDate.now(), "status", LocalDate.now(), LocalDate.now(), 1)
+                new LoanDTO(1L, 1L, 1L, "bookTitle", "author", LocalDateTime.now(), "status", LocalDateTime.now(), LocalDateTime.now(), 1)
         );
 
         when(session.getAttribute("authUsername")).thenReturn("username");

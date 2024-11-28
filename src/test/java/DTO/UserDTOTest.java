@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class UserDTOTest {
     private UserDTO userDTO;
@@ -28,6 +27,12 @@ public class UserDTOTest {
     }
 
     @Test
+    public void testSetUserId1() {
+        userDTO.setUserId(5678L);
+        assertEquals(5678L, userDTO.getUserId());
+    }
+
+    @Test
     public void testGetEmail() {
         assertEquals("email123", userDTO.getEmail());
     }
@@ -39,15 +44,11 @@ public class UserDTOTest {
     }
 
     @Test
-    public void testGetAvatarUrl() {
-        assertNull(userDTO.getAvatarUrl());
+    public void testSetEmail1() {
+        userDTO.setEmail("newEmail123");
+        assertEquals("newEmail123", userDTO.getEmail());
     }
 
-    @Test
-    public void testSetAvatarUrl() {
-        userDTO.setAvatarUrl("avatarUrl123");
-        assertEquals("avatarUrl123", userDTO.getAvatarUrl());
-    }
 
     @Test
     public void testGetUsername() {
@@ -56,6 +57,12 @@ public class UserDTOTest {
 
     @Test
     public void testSetUsername() {
+        userDTO.setUsername("newUsername123");
+        assertEquals("newUsername123", userDTO.getUsername());
+    }
+
+    @Test
+    public void testSetUsername1() {
         userDTO.setUsername("newUsername123");
         assertEquals("newUsername123", userDTO.getUsername());
     }
@@ -72,6 +79,12 @@ public class UserDTOTest {
     }
 
     @Test
+    public void testSetPhone1() {
+        userDTO.setPhone("newPhone123");
+        assertEquals("newPhone123", userDTO.getPhone());
+    }
+
+    @Test
     public void testGetRole() {
         assertEquals(User.UserRole.ROLE_USER, userDTO.getRole());
     }
@@ -83,13 +96,9 @@ public class UserDTOTest {
     }
 
     @Test
-    public void testGetBio() {
-        assertNull(userDTO.getBio());
+    public void testSetRole1() {
+        userDTO.setRole(User.UserRole.ROLE_ADMIN);
+        assertEquals(User.UserRole.ROLE_ADMIN, userDTO.getRole());
     }
 
-    @Test
-    public void testSetBio() {
-        userDTO.setBio("bio123");
-        assertEquals("bio123", userDTO.getBio());
-    }
 }

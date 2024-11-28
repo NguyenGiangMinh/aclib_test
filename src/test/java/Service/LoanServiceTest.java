@@ -1,24 +1,26 @@
 package Service;
 
+import com.aclib.aclib_deploy.DTO.LoanDTO;
 import com.aclib.aclib_deploy.Entity.Book;
 import com.aclib.aclib_deploy.Entity.Loans;
 import com.aclib.aclib_deploy.Entity.User;
+import com.aclib.aclib_deploy.Exception.BookNotFoundException;
 import com.aclib.aclib_deploy.Repository.BookRepository;
 import com.aclib.aclib_deploy.Repository.LoanRepository;
 import com.aclib.aclib_deploy.Repository.UserRepository;
 import com.aclib.aclib_deploy.Service.LoanService;
-import com.aclib.aclib_deploy.ThirdPartyService.EmailService;
+import com.aclib.aclib_deploy.ThirdPartyService.EmailAsyncService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 
 import java.lang.reflect.Field;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class LoanServiceTest {
@@ -31,15 +33,16 @@ public class LoanServiceTest {
 
     private BookRepository bookRepository;
 
-    private EmailService emailService;
+    private EmailAsyncService emailAsyncService;
+
 
     @BeforeEach
     public void setUp() throws NoSuchFieldException, IllegalAccessException {
         userRepository = mock(UserRepository.class);
         bookRepository = mock(BookRepository.class);
         loanRepository = mock(LoanRepository.class);
-        emailService = mock(EmailService.class);
         loanService = new LoanService();
+        emailAsyncService = mock(EmailAsyncService.class);
 
         Field loanRepositoryField = LoanService.class.getDeclaredField("loanRepository");
         loanRepositoryField.setAccessible(true);
@@ -53,23 +56,53 @@ public class LoanServiceTest {
         bookRepositoryField.setAccessible(true);
         bookRepositoryField.set(loanService, bookRepository);
 
-        Field emailServiceField = LoanService.class.getDeclaredField("emailService");
-        emailServiceField.setAccessible(true);
-        emailServiceField.set(loanService, emailService);
+
+        Field emailAsyncServiceField = LoanService.class.getDeclaredField("emailAsyncService");
+        emailAsyncServiceField.setAccessible(true);
+        emailAsyncServiceField.set(loanService, emailAsyncService);
+
     }
 
     @Test
     public void testSearchByLoansId() throws NoSuchFieldException, IllegalAccessException {
         Long id = 1L;
+        Long userId = 1L;
+        Long bookId = 1L;
         Loans mockLoans = new Loans();
+        User mockUser = new User();
+        Book mockBook = new Book();
+
+        // Set the user ID
+        Field userIdField = User.class.getDeclaredField("id");
+        userIdField.setAccessible(true);
+        userIdField.set(mockUser, userId);
+
+        // Set the book ID
+        Field bookIdField = Book.class.getDeclaredField("id");
+        bookIdField.setAccessible(true);
+        bookIdField.set(mockBook, bookId);
+
+        // Set the user and book in the loan
+        Field userField = Loans.class.getDeclaredField("user");
+        userField.setAccessible(true);
+        userField.set(mockLoans, mockUser);
+
+        Field bookField = Loans.class.getDeclaredField("book");
+        bookField.setAccessible(true);
+        bookField.set(mockLoans, mockBook);
+
+        // Set the loan ID
         Field loansId = Loans.class.getDeclaredField("loansId");
         loansId.setAccessible(true);
         loansId.set(mockLoans, id);
+
         when(loanRepository.findById(id)).thenReturn(java.util.Optional.of(mockLoans));
-        Loans result = loanService.searchByLoansId(id).get();
+        LoanDTO result = loanService.searchByLoansId(id);
 
         assertNotNull(result);
         assertEquals(id, result.getLoansId());
+        assertEquals(userId, result.getUserId());
+        assertEquals(bookId, result.getBookId());
     }
 
     @Test
@@ -112,83 +145,132 @@ public class LoanServiceTest {
         Book mockBook = new Book();
         mockBook.setCopy(1);
 
+        // Set the user ID
         Field userIdField = User.class.getDeclaredField("id");
         userIdField.setAccessible(true);
         userIdField.set(mockUser, userId);
 
+        // Set the book ID
+        Field bookIdField = Book.class.getDeclaredField("idSelfLink");
+        bookIdField.setAccessible(true);
+        bookIdField.set(mockBook, bookId);
+
         when(bookRepository.findByIdSelfLink(bookId)).thenReturn(mockBook);
         when(userRepository.findById(userId)).thenReturn(java.util.Optional.of(mockUser));
-        Loans result = loanService.borrowBook(bookId, userId);
+        when(loanRepository.findByIdSelfLinkAndUserId(bookId, userId)).thenReturn(null);
+
+        LoanDTO result = loanService.borrowBook(bookId, userId);
 
         assertNotNull(result);
         assertEquals(bookId, result.getIdSelfLink());
-        assertEquals(userId, result.getUser().getId());
-        assertEquals(Loans.LoanStatus.ACTIVE, result.getLoanStatus());
-        //giam so luong sach thanh 0 khi muon thanh cong
-        assertEquals(0, mockBook.getCopy());
+        assertEquals(userId, result.getUserId());
+        assertEquals(Loans.LoanStatus.ACTIVE.name(), result.getLoanStatus());
+        assertEquals(0, mockBook.getCopy()); // Ensure the book copy count is decremented
     }
 
     @Test
-    public void testReturnBook() throws NoSuchFieldException, IllegalAccessException {
+    public void testBorrowBook_BookNotFound() {
         String bookId = "1";
         Long userId = 1L;
 
-        Loans mockLoans = new Loans();
+        when(bookRepository.findByIdSelfLink(bookId)).thenReturn(null);
+
+        assertThrows(BookNotFoundException.class, () -> loanService.borrowBook(bookId, userId));
+    }
+
+
+    @Test
+    public void testReturnBook() throws Exception {
+        // Mock dữ liệu
+        long bookId = 1L;
+        long userId = 1L;
+
         Book mockBook = new Book();
-        mockBook.setCopy(0);
+        mockBook.setId(1L);
+        mockBook.setCopy(1);
+        mockBook.setTitle("Test Book");
+
+        Loans mockLoan = new Loans();
+        mockLoan.setBook(mockBook);
 
         User mockUser = new User();
         Field userIdField = User.class.getDeclaredField("id");
         userIdField.setAccessible(true);
         userIdField.set(mockUser, userId);
+        mockUser.setEmail("test@example.com");
+        mockUser.setUsername("testuser");
+        mockLoan.setUser(mockUser);
 
-        Field userField = Loans.class.getDeclaredField("user");
-        userField.setAccessible(true);
-        userField.set(mockLoans, mockUser);
+        // Cấu hình behavior của mock
+        when(loanRepository.findByIdSelfLinkAndUserId(String.valueOf(bookId), userId))
+                .thenReturn(mockLoan);
+        when(userRepository.findById(userId))
+                .thenReturn(Optional.of(mockUser));
+        when(loanRepository.save(any(Loans.class))).thenReturn(mockLoan);
+        when(bookRepository.save(any(Book.class))).thenReturn(mockBook);
+        doNothing().when(emailAsyncService).sendEmailAsyncReturnSuccessfully(anyString(), anyString(), anyString());
 
-        mockLoans.setBook(mockBook);
-        mockBook.setStatus(String.valueOf(Loans.LoanStatus.ACTIVE));
+        // Thực hiện test
+        LoanDTO result = loanService.returnBook(String.valueOf(bookId), userId);
 
-        when(loanRepository.findByIdSelfLinkAndUserId(bookId, userId)).thenReturn(mockLoans);
-        when(bookRepository.findByIdSelfLink(bookId)).thenReturn(mockBook);
-
-        Loans result = loanService.returnBook(bookId, userId);
-
+        // Kiểm tra kết quả
         assertNotNull(result);
-        assertEquals(1, mockBook.getCopy());
-        assertEquals(Loans.LoanStatus.RETURNED, result.getLoanStatus());
-        assertNotNull(result.getReturnDate());
+        assertEquals("RETURNED", result.getLoanStatus());
+        assertEquals(2, mockLoan.getBook().getCopy()); // Bản copy tăng lên 1
     }
+
 
     @Test
     public void testCheckOverDueDateLoans() {
+        User mockUser = new User();
+        mockUser.setEmail("test@example.com");
+        mockUser.setUsername("testuser");
+
         Loans mockLoans = new Loans();
-        mockLoans.setNotificationSentDate(null);
         mockLoans.setLoanStatus(Loans.LoanStatus.ACTIVE);
-        mockLoans.setUser(new User());
-        mockLoans.setBook(new Book());
-        mockLoans.setDueDate(LocalDate.now().minusDays(1));
+        mockLoans.setDueDate(LocalDateTime.now().minusDays(1));
+        mockLoans.setRenewalCount(0);
+        mockLoans.setReturnDate(null);
+        mockLoans.setUser(mockUser);
+        mockLoans.setNotificationSentDate(LocalDateTime.now().minusMinutes(3)); // Set notification sent date
 
         List<Loans> loanList = new ArrayList<>();
         loanList.add(mockLoans);
 
-        when(loanRepository.findAllByDueDateAndReturnDateIsNull(LocalDate.now())).thenReturn(loanList);
+        when(loanRepository.findAllByDueDateAndReturnDateIsNull(any(LocalDateTime.class))).thenReturn(loanList);
+
         loanService.checkOverDueDateLoans();
 
-        assertEquals(Loans.LoanStatus.OVERDUE, mockLoans.getLoanStatus());
+        for (Loans loan : loanList) {
+            verify(loanRepository, times(1)).save(loan);
+            assertEquals(Loans.LoanStatus.LOST, loan.getLoanStatus());
+            assertNotNull(loan.getReturnDate());
+        }
     }
 
     @Test
     public void testBorrowAgain() throws NoSuchFieldException, IllegalAccessException {
         Long loanId = 1L;
+        User mockUser = new User();
+        Field userIdField = User.class.getDeclaredField("id");
+        userIdField.setAccessible(true);
+        userIdField.set(mockUser, 1L);
+
+        Book mockBook = new Book();
+        Field bookIdField = Book.class.getDeclaredField("id");
+        bookIdField.setAccessible(true);
+        bookIdField.set(mockBook, 1L);
+
         Loans mockLoans = new Loans();
         mockLoans.setRenewalCount(0);
+        mockLoans.setUser(mockUser);
+        mockLoans.setBook(mockBook);
 
         Field loanIdField = Loans.class.getDeclaredField("loansId");
         loanIdField.setAccessible(true);
         loanIdField.set(mockLoans, loanId);
 
-        when(loanRepository.findById(loanId)).thenReturn(java.util.Optional.of(mockLoans));
+        when(loanRepository.findById(loanId)).thenReturn(Optional.of(mockLoans));
 
         loanService.borrowAgain(loanId);
 

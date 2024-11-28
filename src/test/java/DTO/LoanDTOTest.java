@@ -4,7 +4,8 @@ import com.aclib.aclib_deploy.DTO.LoanDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -13,7 +14,7 @@ public class LoanDTOTest {
 
     @BeforeEach
     void setUp() {
-        loanDTO = new LoanDTO(1111L, 22222L, 33333L, "id123", "Title", LocalDate.parse("2023-01-01"), "Borrowed", LocalDate.parse("2023-01-15"), LocalDate.parse("2023-01-08"), 0);
+        loanDTO = new LoanDTO(1111L, 22222L, 33333L, "id123", "Title", LocalDateTime.parse("2023-01-01T12:00:00"), "Borrowed", LocalDateTime.parse("2023-01-15T12:00:00"), LocalDateTime.parse("2023-01-08T12:00:00"), 0);
     }
 
     @Test
@@ -26,6 +27,7 @@ public class LoanDTOTest {
         loanDTO.setLoansId(2222L);
         assertEquals(2222L, loanDTO.getLoansId());
     }
+
 
     @Test
     public void testGetUserId() {
@@ -73,13 +75,13 @@ public class LoanDTOTest {
 
     @Test
     public void testGetBorrowDate() {
-        assertEquals(LocalDate.parse("2023-01-01"), loanDTO.getBorrowDate());
+        assertEquals(LocalDateTime.parse("2023-01-01T12:00"), loanDTO.getBorrowDate());
     }
 
     @Test
     public void testSetBorrowDate() {
-        loanDTO.setBorrowDate(LocalDate.parse("2023-01-02"));
-        assertEquals(LocalDate.parse("2023-01-02"), loanDTO.getBorrowDate());
+        loanDTO.setBorrowDate(LocalDateTime.parse("2023-01-02T12:00:00"));
+        assertEquals(LocalDateTime.parse("2023-01-02T12:00"), loanDTO.getBorrowDate());
     }
 
     @Test
@@ -95,24 +97,24 @@ public class LoanDTOTest {
 
     @Test
     public void testGetDueDate() {
-        assertEquals(LocalDate.parse("2023-01-08"), loanDTO.getDueDate());
+        assertEquals(LocalDateTime.parse("2023-01-08T12:00"), loanDTO.getDueDate());
     }
 
     @Test
     public void testSetDueDate() {
-        loanDTO.setDueDate(LocalDate.parse("2023-01-09"));
-        assertEquals(LocalDate.parse("2023-01-09"), loanDTO.getDueDate());
+        loanDTO.setDueDate(LocalDateTime.parse("2023-01-09T12:00:00"));
+        assertEquals(LocalDateTime.parse("2023-01-09T12:00"), loanDTO.getDueDate());
     }
 
     @Test
     public void testGetReturnDate() {
-        assertEquals(LocalDate.parse("2023-01-15"), loanDTO.getReturnDate());
+        assertEquals(LocalDateTime.parse("2023-01-15T12:00"), loanDTO.getReturnDate());
     }
 
     @Test
     public void testSetReturnDate() {
-        loanDTO.setReturnDate(LocalDate.parse("2023-01-16"));
-        assertEquals(LocalDate.parse("2023-01-16"), loanDTO.getReturnDate());
+        loanDTO.setReturnDate(LocalDateTime.parse("2023-01-16T12:00:00"));
+        assertEquals(LocalDateTime.parse("2023-01-16T12:00"), loanDTO.getReturnDate());
     }
 
     @Test

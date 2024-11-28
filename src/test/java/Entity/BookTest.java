@@ -51,6 +51,12 @@ public class BookTest {
     }
 
     @Test
+    void testSetAndGetBookTitle2() {
+        book.setTitle("The Platform 2");
+        assertEquals("The Platform 2", book.getTitle());
+    }
+
+    @Test
     void testSetAndGetAuthor() {
         book.setAuthor("LHNam2005");
         assertEquals("LHNam2005", book.getAuthor());
@@ -75,6 +81,12 @@ public class BookTest {
     }
 
     @Test
+    void testSetAndGetPublishDate2() {
+        book.setPublishDate("15-09-2005");
+        assertEquals("15-09-2005", book.getPublishDate());
+    }
+
+    @Test
     void testSetAndGetThumbnail() {
         book.setThumbnail("LouisVN.png");
         assertEquals("LouisVN.png", book.getThumbnail());
@@ -87,15 +99,9 @@ public class BookTest {
     }
 
     @Test
-    void testSetAndGetStatus() {
-        book.setStatus("Available");
-        assertEquals("Available", book.getStatus());
-    }
-
-    @Test
-    void testSetAndGetStatus1() {
-        book.setStatus("UnAvailable");
-        assertEquals("UnAvailable", book.getStatus());
+    void testSetAndGetThumbnail2() {
+        book.setThumbnail("Namdz2.png");
+        assertEquals("Namdz2.png", book.getThumbnail());
     }
 
     @Test
@@ -129,10 +135,17 @@ public class BookTest {
     }
 
     @Test
+    void testSetAndGetSeltLink2() {
+        book.setSelfLink("accode2.com");
+        assertEquals("accode2.com", book.getSelfLink());
+    }
+
+    @Test
     void testSetAndGetSeltLink1() {
         book.setSelfLink("accodehehe.com");
         assertEquals("accodehehe.com", book.getSelfLink());
     }
+
 
     @Test
     void testSetAndGetCategory() {
@@ -144,5 +157,11 @@ public class BookTest {
     void testSetAndGetCategory1() {
         book.setCategory("Math");
         assertEquals("Math", book.getCategory());
+    }
+
+    @Test
+    void testSetAndGetCategory2() {
+        book.setCategory("History");
+        assertEquals("History", book.getCategory());
     }
 }

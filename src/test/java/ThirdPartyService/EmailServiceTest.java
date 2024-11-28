@@ -8,7 +8,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import java.lang.reflect.Field;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -106,7 +106,7 @@ public class EmailServiceTest {
         String toEmail = "test@gmail.com";
         String userName = "user";
         String bookTitle = "book";
-        LocalDate dueDate = LocalDate.now().plusDays(7);
+        LocalDateTime dueDate = LocalDateTime.now().plusDays(7);
 
         emailService.makingLoanSuccessfully(toEmail, userName, bookTitle, dueDate);
         ArgumentCaptor<SimpleMailMessage> argument = ArgumentCaptor.forClass(SimpleMailMessage.class);
@@ -115,7 +115,7 @@ public class EmailServiceTest {
         SimpleMailMessage message = argument.getValue();
         assertEquals(toEmail, message.getTo()[0]);
         assertEquals("Notification: You successfully make an loan", message.getSubject());
-        assertEquals("The book ' " + bookTitle + " ' was successfully borrowed by user " + userName
+        assertEquals( "The book '" + bookTitle + "' was successfully borrowed by user " + userName
                 + "\n" + "Your loans will be over due date at " + dueDate
                 + "\n" + "Thanks for using our service."
                 + "\n" + "Have a nice day", message.getText());

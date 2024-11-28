@@ -2,6 +2,7 @@ package Service;
 
 import com.aclib.aclib_deploy.DTO.BookDTO;
 import com.aclib.aclib_deploy.Entity.Book;
+import com.aclib.aclib_deploy.Exception.BookNotFoundException;
 import com.aclib.aclib_deploy.Repository.BookRepository;
 import com.aclib.aclib_deploy.Service.BookService;
 import com.aclib.aclib_deploy.ThirdPartyService.GoogleService;
@@ -47,6 +48,7 @@ public class BookServiceTest {
         assertNotNull(result);
         assertEquals(1, result.size());
         assertEquals("Harry Potter and the Philosopher's Stone", result.get(0).getTitle());
+
     }
 
     @Test
@@ -78,7 +80,6 @@ public class BookServiceTest {
         book.setThumbnail("thumbnail");
         book.setPublisher("publisher");
         book.setPublishDate("publishedDate");
-        book.setStatus("available");
         book.setCopy(1);
         when(bookRepository.findByIdSelfLink(id)).thenReturn(book);
         BookDTO result = bookService.searchById(id);

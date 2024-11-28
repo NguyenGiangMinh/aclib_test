@@ -100,4 +100,9 @@ public class UserInfoTest {
     public void testIsCredentialsNonExpired1() {
         assertTrue(userInfo1.isCredentialsNonExpired());
     }
+
+    @Test
+    public void testIsCredentialsNonExpired2() {
+        assertTrue(userInfo1.isCredentialsNonExpired());
+    }
 }

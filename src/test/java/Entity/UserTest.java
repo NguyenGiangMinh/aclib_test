@@ -38,6 +38,11 @@ public class UserTest {
     }
 
     @Test
+    public void testsetUsername2() {
+        user.setUsername("NGM");
+        assertEquals("NGM", user.getUsername());
+    }
+    @Test
     public void testsetPassword() {
         user.setPassword("123456abc@");
         assertEquals("123456abc@", user.getPassword());
@@ -74,6 +79,12 @@ public class UserTest {
     }
 
     @Test
+    public void testsetEmail2() {
+        user.setEmail("email");
+        assertEquals("email", user.getEmail());
+    }
+
+    @Test
     public void testsetPhone() {
         user.setPhone("0987654321");
         assertEquals("0987654321", user.getPhone());
@@ -98,6 +109,12 @@ public class UserTest {
     }
 
     @Test
+    public void testsetOtp2() {
+        user.setOtp("otp");
+        assertEquals("otp", user.getOtp());
+    }
+
+    @Test
     public void testsetExpiredTime() {
         LocalDateTime time = LocalDateTime.now();
         user.setExpiredTime(time);
@@ -112,6 +129,13 @@ public class UserTest {
     }
 
     @Test
+    public void testsetExpiredTime2() {
+        LocalDateTime time = LocalDateTime.of(2021, 12, 31, 23, 59, 59);
+        user.setExpiredTime(time);
+        assertEquals(time, user.getExpiredTime());
+    }
+
+    @Test
     public void testSetLastOTPRequest() {
         LocalDateTime time = LocalDateTime.now();
         user.setLastOTPRequest(time);
@@ -120,6 +144,13 @@ public class UserTest {
 
     @Test
     public void testSetLastOTPRequest1() {
+        LocalDateTime time = LocalDateTime.of(2021, 12, 31, 23, 59, 59);
+        user.setLastOTPRequest(time);
+        assertEquals(time, user.getLastOTPRequest());
+    }
+
+    @Test
+    public void testSetLastOTPRequest2() {
         LocalDateTime time = LocalDateTime.of(2021, 12, 31, 23, 59, 59);
         user.setLastOTPRequest(time);
         assertEquals(time, user.getLastOTPRequest());
@@ -149,27 +180,4 @@ public class UserTest {
         assertEquals("654321", user.getRegistrationId());
     }
 
-    @Test
-    public void testsetBio() {
-        user.setBio("Louis VN 2005: Handsome and very handsome");
-        assertEquals("Louis VN 2005: Handsome and very handsome", user.getBio());
-    }
-
-    @Test
-    public void testsetBio1() {
-        user.setBio("Le Hoai Nam :>>");
-        assertEquals("Le Hoai Nam :>>", user.getBio());
-    }
-
-    @Test
-    public void setAvatarUrl() {
-        user.setAvatarUrl("https://www.google.com");
-        assertEquals("https://www.google.com", user.getAvatarUrl());
-    }
-
-    @Test
-    public void setAvatarUrl1() {
-        user.setAvatarUrl("https://www.facebook.com");
-        assertEquals("https://www.facebook.com", user.getAvatarUrl());
-    }
 }

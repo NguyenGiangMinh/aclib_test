@@ -5,6 +5,7 @@ import com.aclib.aclib_deploy.Entity.User;
 import com.aclib.aclib_deploy.Repository.LoanRepository;
 import com.aclib.aclib_deploy.Repository.UserRepository;
 import com.aclib.aclib_deploy.Service.UserService;
+import com.aclib.aclib_deploy.ThirdPartyService.EmailAsyncService;
 import com.aclib.aclib_deploy.ThirdPartyService.EmailService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,18 +22,23 @@ import static org.mockito.Mockito.*;
 
 public class UserServiceTest {
     private UserService userService;
+
     private UserRepository userRepository;
+
     private PasswordEncoder passwordEncoder;
+
     private LoanRepository loanRepository;
-    private EmailService emailService;
+
+    private EmailAsyncService emailAsyncService;
 
     @BeforeEach
     public void setUp() throws NoSuchFieldException, IllegalAccessException {
         userRepository = mock(UserRepository.class);
         passwordEncoder = mock(PasswordEncoder.class);
         loanRepository = mock(LoanRepository.class);
-        emailService = mock(EmailService.class);
+        emailAsyncService = mock(EmailAsyncService.class);
         userService = new UserService();
+
         Field userRepositoryField = userService.getClass().getDeclaredField("userRepository");
         userRepositoryField.setAccessible(true);
         userRepositoryField.set(userService, userRepository);
@@ -45,9 +51,9 @@ public class UserServiceTest {
         loanRepositoryField.setAccessible(true);
         loanRepositoryField.set(userService, loanRepository);
 
-        Field emailServiceField = userService.getClass().getDeclaredField("emailService");
-        emailServiceField.setAccessible(true);
-        emailServiceField.set(userService, emailService);
+        Field emailAsyncServiceField = userService.getClass().getDeclaredField("emailAsyncService");
+        emailAsyncServiceField.setAccessible(true);
+        emailAsyncServiceField.set(userService, emailAsyncService);
     }
 
     @Test
@@ -198,8 +204,6 @@ public class UserServiceTest {
         idField.setAccessible(true);
         idField.set(user, userId);
         user.setUsername(username);
-        user.setBio(bio);
-        user.setAvatarUrl(avatarUrl);
         user.setPhone(phone);
         user.setEmail(email);
         user.setRole(role);
@@ -209,8 +213,6 @@ public class UserServiceTest {
         UserDTO userDTO = userService.getProfile(userId);
 
         assertEquals(username, userDTO.getUsername());
-        assertEquals(bio, userDTO.getBio());
-        assertEquals(avatarUrl, userDTO.getAvatarUrl());
         assertEquals(phone, userDTO.getPhone());
         assertEquals(email, userDTO.getEmail());
         assertEquals(userId, userDTO.getUserId());
@@ -221,16 +223,13 @@ public class UserServiceTest {
     public void testMapToUserDTO() {
         User user = new User();
         user.setUsername("testusername");
-        user.setBio("testbio");
-        user.setAvatarUrl("testavatarurl");
         user.setPhone("0123456789");
         user.setRole(User.UserRole.ROLE_USER);
 
         UserDTO userDTO = userService.mapToUserDTO(user);
 
         assertEquals(user.getUsername(), userDTO.getUsername());
-        assertEquals(user.getBio(), userDTO.getBio());
-        assertEquals(user.getAvatarUrl(), userDTO.getAvatarUrl());
+
         assertEquals(user.getPhone(), userDTO.getPhone());
         assertEquals(user.getRole(), userDTO.getRole());
     }

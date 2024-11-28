@@ -6,6 +6,10 @@ import com.aclib.aclib_deploy.Entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.lang.reflect.Field;
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LoansTest {
@@ -27,6 +31,7 @@ public class LoansTest {
     public void testgetLoansId() {
         assertEquals(0, loan.getLoansId());
     }
+
 
     @Test
     public void testSetAndGetUser() {
@@ -67,38 +72,38 @@ public class LoansTest {
 
     @Test
     public void testSetAndGetBorrowDate() {
-        loan.setBorrowDate(java.time.LocalDate.now());
-        assertEquals(java.time.LocalDate.now(), loan.getBorrowDate());
+        loan.setBorrowDate(LocalDateTime.parse("2021-12-31T23:59:59"));
+        assertEquals(LocalDateTime.parse("2021-12-31T23:59:59"), loan.getBorrowDate());
     }
 
     @Test
     public void testSetAndGetBorrowDate1() {
-        loan.setBorrowDate(java.time.LocalDate.of(2021, 12, 31));
-        assertEquals(java.time.LocalDate.of(2021, 12, 31), loan.getBorrowDate());
+        loan.setBorrowDate(LocalDateTime.parse("2021-01-31T23:59:59"));
+        assertEquals(LocalDateTime.parse("2021-01-31T23:59:59"), loan.getBorrowDate());
     }
 
     @Test
     public void testSetAndGetDueDate() {
-        loan.setDueDate(java.time.LocalDate.now());
-        assertEquals(java.time.LocalDate.now(), loan.getDueDate());
+        loan.setDueDate(LocalDateTime.parse("2021-12-31T23:59:59"));
+        assertEquals(LocalDateTime.parse("2021-12-31T23:59:59"), loan.getDueDate());
     }
 
     @Test
     public void testSetAndGetDueDate1() {
-        loan.setDueDate(java.time.LocalDate.of(2021, 12, 31));
-        assertEquals(java.time.LocalDate.of(2021, 12, 31), loan.getDueDate());
+        loan.setDueDate(LocalDateTime.parse("2021-01-31T23:59:59"));
+        assertEquals(LocalDateTime.parse("2021-01-31T23:59:59"), loan.getDueDate());
     }
 
     @Test
     public void testSetAndGetReturnDate() {
-        loan.setReturnDate(java.time.LocalDate.now());
-        assertEquals(java.time.LocalDate.now(), loan.getReturnDate());
+        loan.setReturnDate(LocalDateTime.parse("2021-12-31T23:59:59"));
+        assertEquals(LocalDateTime.parse("2021-12-31T23:59:59"), loan.getReturnDate());
     }
 
     @Test
     public void testSetAndGetReturnDate1() {
-        loan.setReturnDate(java.time.LocalDate.of(2021, 12, 31));
-        assertEquals(java.time.LocalDate.of(2021, 12, 31), loan.getReturnDate());
+        loan.setReturnDate(LocalDateTime.parse("2021-01-31T23:59:59"));
+        assertEquals(LocalDateTime.parse("2021-01-31T23:59:59"), loan.getReturnDate());
     }
 
     @Test
@@ -115,14 +120,14 @@ public class LoansTest {
 
     @Test
     public void testSetAndGetNotificationSentDate() {
-        loan.setNotificationSentDate(java.time.LocalDate.now());
-        assertEquals(java.time.LocalDate.now(), loan.getNotificationSentDate());
+        loan.setNotificationSentDate(LocalDateTime.parse("2021-01-31T23:59:59"));
+        assertEquals(LocalDateTime.parse("2021-01-31T23:59:59"), loan.getNotificationSentDate());
     }
 
     @Test
     public void testSetAndGetNotificationSentDate1() {
-        loan.setNotificationSentDate(java.time.LocalDate.of(2021, 12, 31));
-        assertEquals(java.time.LocalDate.of(2021, 12, 31), loan.getNotificationSentDate());
+        loan.setNotificationSentDate(LocalDateTime.parse("2021-12-31T23:59:59"));
+        assertEquals(LocalDateTime.parse("2021-12-31T23:59:59"), loan.getNotificationSentDate());
     }
 
     @Test

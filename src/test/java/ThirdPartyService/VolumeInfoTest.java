@@ -67,8 +67,8 @@ public class VolumeInfoTest {
 
     @Test
     public void testSetAndGetisAvailble() {
-        volumeInfo.setAvailble(true);
-        assertTrue(volumeInfo.isAvailble());
+        volumeInfo.setAvailable(true);
+        assertTrue(volumeInfo.isAvailable());
     }
 
     @Test
@@ -78,4 +78,16 @@ public class VolumeInfoTest {
         assertArrayEquals(categories, volumeInfo.getCategories());
     }
 
+    @Test
+    public void testSetAndGetInfoLink() {
+        volumeInfo.setInfoLink("infoLink");
+        assertEquals("infoLink", volumeInfo.getInfoLink());
+    }
+
+
+    @Test
+    public void testSetAndGetPreviewLink() {
+        volumeInfo.setPreviewLink("previewLink");
+        assertEquals("previewLink", volumeInfo.getPreviewLink());
+    }
 }

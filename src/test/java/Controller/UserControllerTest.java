@@ -56,26 +56,4 @@ public class UserControllerTest {
         assertEquals(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null), result2);
     }
 
-    @Test
-    public void testEditUserProfile() throws Exception {
-        User user1 = new User();
-        Field user1Field = User.class.getDeclaredField("id");
-        user1Field.setAccessible(true);
-        user1Field.set(user1, 1L);
-
-        UserDTO userDTO = new UserDTO();
-        when(session.getAttribute("authUsername")).thenReturn("username");
-        when(userService.findUser("username")).thenReturn(user1);
-        when(userService.updateDetails(user1, "phone", "bio", "file")).thenReturn(userDTO);
-
-        ResponseEntity<UserDTO> result = userController.editUserProfile(new UserController.UserProfileUpdateDTO(user1, "phone", "bio", "file"), session);
-
-        assertEquals(ResponseEntity.ok(userDTO), result);
-
-        when(userService.findUser("username")).thenReturn(null);
-
-        ResponseEntity<UserDTO> result2 = userController.editUserProfile(new UserController.UserProfileUpdateDTO(user1, "phone", "bio", "file"), session);
-
-        assertEquals(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null), result2);
-    }
 }
