@@ -87,7 +87,6 @@ and an email will be sent to all adminstrators. From that, the admintrator can d
     - GET /api/loan/loanDeals - View loans for a specific user.
 
  * CORS Configuration
- * The backend allows cross-origin requests from:
 
 ## Frontend
 
