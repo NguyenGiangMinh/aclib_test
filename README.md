@@ -20,8 +20,8 @@ This is the backend service for a library management system built with Spring Bo
 ## Features
 Email Notifications
  * Asynchronous Processing for efficient email handling.
-    - Send OTP after user registration (OTP expires after 5 minutes).
-    - Resend OTP (limited to once per minute).
+    - Send OTP after user registration (OTP expires after 3 minutes).
+    - Resend OTP (limited to once per 2 minutes).
     - Notify users when borrowing or returning books.
 
 User Management:
