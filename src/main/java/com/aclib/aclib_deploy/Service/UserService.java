@@ -26,7 +26,8 @@ import java.util.stream.Collectors;
 
 @Service
 @EnableTransactionManagement
-public class UserService implements UserDetailsService {
+public class
+UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;

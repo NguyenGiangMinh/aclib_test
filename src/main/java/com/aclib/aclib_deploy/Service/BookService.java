@@ -98,6 +98,7 @@ public class BookService {
 
         if (book == null) {
             BookDTO bookDTO = googleService.searchByIdSelfLink(id);
+            bookDTO.setCopy(0);
             return bookDTO;
         }
 
