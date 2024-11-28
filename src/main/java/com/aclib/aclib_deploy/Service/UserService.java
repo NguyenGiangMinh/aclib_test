@@ -167,6 +167,7 @@ UserService implements UserDetailsService {
 
     public UserDTO mapToUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
+        userDTO.setUserId(user.getId());
         userDTO.setUsername(user.getUsername());
         userDTO.setPhone(user.getPhone());
         userDTO.setRole(user.getRole());
