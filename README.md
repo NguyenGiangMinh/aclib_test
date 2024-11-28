@@ -86,8 +86,6 @@ and an email will be sent to all adminstrators. From that, the admintrator can d
     - PUT /api/loan/renewing - Renew a loan. (just test with postman)
     - GET /api/loan/loanDeals - View loans for a specific user.
 
- * CORS Configuration
-
 ## Frontend
 
 - Frontend: http://localhost:5173 .
@@ -103,10 +101,10 @@ and an email will be sent to all adminstrators. From that, the admintrator can d
 - SMTP for email notifications
 
 ## Notes
-1. The database is automatically created on the first run
-2. Run these SQL queries to ensure proper table setup: sql
-    - ALTER TABLE aclib_book MODIFY thumbnail TEXT;
-    - ALTER TABLE aclib_book ADD INDEX (id_self_link);
+1.The database is automatically created on the first run.
+2.Run these SQL queries to ensure proper table setup: sql
+- ALTER TABLE aclib_book MODIFY thumbnail TEXT;
+- ALTER TABLE aclib_book ADD INDEX (id_self_link);
 ## Known Issues
 1. Ensure CORS is configured correctly for the frontend.
 2. Session handling should align with frontend expectations.
