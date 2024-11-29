@@ -2,9 +2,7 @@
 This is the backend service for a library management system built with Spring Boot by JAVA. It manages book records, user authentication, borrowing processes, and integrates with the Google Books API.
 
 ## Inheritance tree
--
--
--
+- [link draw.io].(https://drive.google.com/file/d/1rEtAcEcqwDIqWaxCq-VCSd9OPi5LbFja/view?usp=sharing).
 
 ## UML Diagram
 - [Image UML](https://github.com/user-attachments/assets/a6e4aefd-d41e-4242-9248-6a8a9312b667)
