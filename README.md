@@ -103,6 +103,7 @@ and an email will be sent to all adminstrators. From that, the admintrator can d
 2.Run these SQL queries to ensure proper table setup: sql
 - ALTER TABLE aclib_book MODIFY thumbnail TEXT;
 - ALTER TABLE aclib_book ADD INDEX (id_self_link);
+- ALTER TABLE aclib_book ADD CONSTRAINT UNIQUE (id_self_link);
 ## Known Issues
 1. Ensure CORS is configured correctly for the frontend.
 2. Session handling should align with frontend expectations.
