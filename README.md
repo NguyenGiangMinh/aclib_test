@@ -89,7 +89,31 @@ and an email will be sent to all adminstrators. From that, the admintrator can d
 - Frontend: http://localhost:5173 .
 - To enable this, a global CORS configuration is implemented.
 
-## Testing - Giang minh:
+## Testing
+
+## **1. Overview**  
+- This project is equipped with a comprehensive testing system to ensure the codebase is stable and maintainable.  
+
+## **2. Testing Technologies**  
+- **JUnit**: The primary framework used to write and execute unit tests.  
+- **Mockito**: A library used for mocking dependencies and controlling external factors during the testing process.  
+
+## **3. Test Setup**  
+### **Configuration**  
+- Verify that the pom.xml file declares the necessary testing libraries, for example:  
+  ```xml
+  <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+  </dependency>
+  <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-test</artifactId>
+      <scope>test</scope>
+  </dependency>
+## **4. API Testing Purpose**
+- Test the RESTful APIs for correctness, status codes, and responses. Tools: Postman: For manual API testing. Rest Assured: For automated API tests. Pre-requisites: Java 17 or higher. Maven installed.
 
 
 ## Requirements
