@@ -22,7 +22,7 @@ public class Book {
     @Column(name = "thumnail", columnDefinition = "TEXT")
     private String thumbnail;
 
-    @Column(name = "id_selfLink", columnDefinition = "VARCHAR(255) NOT NULL")
+    @Column(name = "id_selfLink", columnDefinition = "VARCHAR(255) NOT NULL", nullable = false, unique = true)
     private String idSelfLink;
 
     @Column(name = "SelfLink", nullable = false)
